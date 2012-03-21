@@ -1,0 +1,12 @@
+name: FirstJoinPlus
+main: me.chaseoes.firstjoinplus.FirstJoinPlus
+version: 1.0
+commands:
+  saywhat:
+    description: 'Apply.'
+    usage: |
+      /<command>
+  saywat:
+    description: 'Apply1.'
+    usage: |
+      /<command>
