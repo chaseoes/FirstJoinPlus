@@ -9,64 +9,105 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
-public class FirstJoinPlusPlayerListener extends JavaPlugin implements Listener {
 
-	    @EventHandler(priority = EventPriority.HIGHEST)
-	    public void onJoinLogin(PlayerJoinEvent event) {
-	        System.out.println("Debugging: Player Joined!");
-	    	
-	        if (this.getConfig().getBoolean("numberonjoin")) {
-                File f = new File(Config.worldname + "/players/");
-                int count = 0;
-                for (File file : f.listFiles()) {
-                	if (file.isFile()) {
-                		count++;
-                    }
-                }
-                // Convert count to a string.
-                String number = "" + count;
-                String number1 = Config.numbermessage.replace("%number%", number);
-                Bukkit.getServer().broadcastMessage(number1);
-                System.out.println("Debugging: numberonjoin is true!");
-            } 
-            else {
-            	System.out.println("Debugging: numberonjoin is false!");
-            }
-            
-	        Player p = event.getPlayer();
-	        String name = p.getName();
-	        String firstjmessage = Config.firstjoinmessage.replace("%name%", name);
-	        String jmessage = Config.joinmessage.replace("%name%", name);
-	        File file = new File(Config.worldname + "/players/" + name + ".dat");
-	        boolean exists = file.exists();
-	        // Change message on first join.
-	        if (!exists) {
-	            event.setJoinMessage(firstjmessage);
-	        } 
-	        // Change message on join.
-	        else {
-	            event.setJoinMessage(jmessage); 
-	        }
-	        
+public class FirstJoinPlusPlayerListener implements Listener {
+
+	private final JavaPlugin plugin;
+
+	public FirstJoinPlusPlayerListener(final JavaPlugin plugin) {
+		this.plugin = plugin;
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onJoinLogin(PlayerJoinEvent event) {
+
+		if (plugin.getConfig().getBoolean("settings.debug")) {
+			System.out
+					.println("[FirstJoinPlus] Debugging: A player joined the game.");
+		}
+		if (plugin.getConfig().getBoolean("settings.numberonjoin")) {
+			File f = new File(Config.worldname + "/players/");
+			int count = 0;
+			for (File file : f.listFiles()) {
+				if (file.isFile()) {
+					count++;
+				}
+			}
+			String number = "" + count;
+			String number1 = Config.numbermessage.replace("%number%", number);
+			Bukkit.getServer().broadcastMessage(number1);
 		}
 
-	    // Change quit message.
-	    @EventHandler
-	    public void onPlayerQuit(PlayerQuitEvent event) {
-	        Player p = event.getPlayer();
-	        String name = p.getName();
-	    	String qmessage = Config.leavemessage.replace("%name%", name);
-	        event.setQuitMessage(qmessage);
-	    }
-	    
-	    // Change kick message.
-	    @EventHandler
-	    public void onPlayerKick(PlayerKickEvent event) {
-	        Player p = event.getPlayer();
-	        String name = p.getName();
-	        String kmessage = Config.kickmessage.replace("%name%", name);
-	        event.setLeaveMessage(kmessage);
-	    }
+		Player p = event.getPlayer();
+		String name = p.getName();
+		String firstjmessage = Config.firstjoinmessage.replace("%name%", name);
+		String jmessage = Config.joinmessage.replace("%name%", name);
+
+		// Change join messages.
+		File file = new File(Config.worldname + "/players/" + name + ".dat");
+		boolean exists = file.exists();
+		if (!exists) {
+			if (plugin.getConfig().getBoolean("settings.showfirstjoinmessage")) {
+				event.setJoinMessage(firstjmessage);
+				if (plugin.getConfig().getBoolean("settings.itemonjoin")) {
+					PlayerInventory inventory = p.getInventory();
+		            Integer itemtogive = Config.item;
+		            Integer amount = Config.amount;
+		            int data = Config.data;
+		            ItemStack istack = new ItemStack(itemtogive, amount, (short) 0, (byte) data);
+		            inventory.addItem(istack);
+				}
+			}
+			else {
+				event.setJoinMessage("");
+			}
+		} else {
+			if (plugin.getConfig().getBoolean("settings.showjoinmessage")) {
+				event.setJoinMessage(jmessage);
+			}
+			else {
+				event.setJoinMessage("");
+			}
+		}
+
+	}
+
+	// Change quit message.
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Player p = event.getPlayer();
+		String name = p.getName();
+		if (plugin.getConfig().getBoolean("settings.showleavemessage")) {
+			String qmessage = Config.leavemessage.replace("%name%", name);
+			event.setQuitMessage(qmessage);
+		} else {
+			event.setQuitMessage("");
+		}
+		if (plugin.getConfig().getBoolean("settings.debug")) {
+			System.out
+					.println("[FirstJoinPlus] Debugging: A player quit the game.");
+		}
+	}
+
+	// Change kick message.
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent event) {
+		Player p = event.getPlayer();
+		String name = p.getName();
+		if (plugin.getConfig().getBoolean("settings.showkickmessage")) {
+			String kmessage = Config.kickmessage.replace("%name%", name);
+			event.setLeaveMessage(kmessage);
+		}
+		else {
+			event.setLeaveMessage("");
+		}
+		if (plugin.getConfig().getBoolean("settings.debug")) {
+			System.out
+					.println("[FirstJoinPlus] Debugging: A player was kicked from the game.");
+		}
+	}
 
 }

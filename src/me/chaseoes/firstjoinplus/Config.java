@@ -8,38 +8,59 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
-  public static File dataDir;
-  public static String worldname;
-  public static String firstjoinmessage;
-  public static String leavemessage;
-  public static Boolean numberonjoin;
-  public static String kickmessage;
-  public static String numbermessage;
-  public static String joinmessage;
+	public static File dataDir;
+	public static String worldname;
+	public static Boolean debug;
+	public static Boolean numberonjoin;
+	public static Boolean itemonjoin;
+	public static Boolean showfirstjoinmessage;
+	public static Boolean showjoinmessage;
+	public static Boolean showleavemessage;
+	public static Boolean showkickmessage;
+	
+	public static String firstjoinmessage;
+	public static String joinmessage;
+	public static String leavemessage;
+	public static String kickmessage;
+	public static String numbermessage;
+	
+	public static Integer item;
+	public static Integer amount;
+	public static Integer data;
 
-  public static void initialize(FileConfiguration config, File pluginDir, Logger log)
-  {
-    try
-    {
-      dataDir = pluginDir;
-      if (!dataDir.exists()) {
-        dataDir.mkdir();
-      }
+	public static void initialize(FileConfiguration config, File pluginDir,
+			Logger log) {
+		try {
+			dataDir = pluginDir;
+			if (!dataDir.exists()) {
+				dataDir.mkdir();
+			}
 
-      ConfigurationSection settings = config.getConfigurationSection("settings");
-      ConfigurationSection messages = config.getConfigurationSection("messages");
+			ConfigurationSection settings = config.getConfigurationSection("settings");
+			ConfigurationSection messages = config.getConfigurationSection("messages");
+			ConfigurationSection items = config.getConfigurationSection("items");
 
-      worldname = settings.getString("worldname");
-      numberonjoin = settings.getBoolean("numeronjoin");
-      
-      firstjoinmessage = messages.getString("firstjoinmessage").replace("&", "§");
-      joinmessage = messages.getString("joinmessage").replace("&", "§");
-      leavemessage = messages.getString("leavemessage").replace("&", "§");
-      kickmessage = messages.getString("kickmessage").replace("&", "§");
-      numbermessage = messages.getString("numbermessage").replace("&", "§");
-      
-    } catch (Exception ex) {
-      log.log(Level.SEVERE, "Unable to load config!", ex);
-    }
-  }
+			worldname = settings.getString("worldname");
+			debug = settings.getBoolean("debug");
+			numberonjoin = settings.getBoolean("numeronjoin");
+			itemonjoin = settings.getBoolean("itemonjoin");
+			showjoinmessage = settings.getBoolean("showfirstjoinmessage");
+			showjoinmessage = settings.getBoolean("showjoinmessage");
+			showleavemessage = settings.getBoolean("showleavemessage");
+			showkickmessage = settings.getBoolean("showkickmessage");
+
+			firstjoinmessage = messages.getString("firstjoinmessage").replace("&", "§");
+			joinmessage = messages.getString("joinmessage").replace("&", "§");
+			leavemessage = messages.getString("leavemessage").replace("&", "§");
+			kickmessage = messages.getString("kickmessage").replace("&", "§");
+			numbermessage = messages.getString("numbermessage").replace("&","§");
+			
+			item = items.getInt("item");
+			amount = items.getInt("amount");
+			data = items.getInt("data");
+
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, "Unable to load config!", ex);
+		}
+	}
 }

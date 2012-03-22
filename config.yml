@@ -1,10 +1,20 @@
 ## FirstJoin Config File ##
 settings:
     worldname: world
+    debug: false
     numberonjoin: true
+    itemonjoin: false
+    showfirstjoinmessage: true
+    showjoinmessage: true
+    showleavemessage: true
+    showkickmessage: true
 messages:
     firstjoinmessage: "&d%name% has joined the game for the first time!"
     joinmessage: "&e%name% has joined the game."
     leavemessage: "&e%name% has left the game."
     kickmessage: "&e%name% was kicked from the game!"
     numbermessage: "&d%number% unique players have joined the server!"
+items:
+    item: 264
+    amount: 1
+    data: 0
