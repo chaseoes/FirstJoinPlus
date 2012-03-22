@@ -1,4 +1,4 @@
-## FirstJoin Config File ##
+## FirstJoin Config File - Note: spawn section not used yet (possibly in 1.2)! ##
 settings:
     worldname: world
     debug: false
@@ -18,3 +18,9 @@ items:
     item: 264
     amount: 1
     data: 0
+spawn:
+    x: 1
+    y: 1
+    z: 1
+    pitch: 1
+    yaw: 1

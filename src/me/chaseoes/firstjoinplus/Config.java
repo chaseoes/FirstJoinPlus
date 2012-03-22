@@ -27,6 +27,12 @@ public class Config {
 	public static Integer item;
 	public static Integer amount;
 	public static Integer data;
+	
+	public static Integer x;
+	public static Integer y;
+	public static Integer z;
+	public static Integer pitch;
+	public static Integer yaw;
 
 	public static void initialize(FileConfiguration config, File pluginDir,
 			Logger log) {
@@ -39,7 +45,9 @@ public class Config {
 			ConfigurationSection settings = config.getConfigurationSection("settings");
 			ConfigurationSection messages = config.getConfigurationSection("messages");
 			ConfigurationSection items = config.getConfigurationSection("items");
+			ConfigurationSection spawn = config.getConfigurationSection("spawn");
 
+			// Settings Section
 			worldname = settings.getString("worldname");
 			debug = settings.getBoolean("debug");
 			numberonjoin = settings.getBoolean("numeronjoin");
@@ -49,15 +57,24 @@ public class Config {
 			showleavemessage = settings.getBoolean("showleavemessage");
 			showkickmessage = settings.getBoolean("showkickmessage");
 
+			// Messages Section
 			firstjoinmessage = messages.getString("firstjoinmessage").replace("&", "§");
 			joinmessage = messages.getString("joinmessage").replace("&", "§");
 			leavemessage = messages.getString("leavemessage").replace("&", "§");
 			kickmessage = messages.getString("kickmessage").replace("&", "§");
 			numbermessage = messages.getString("numbermessage").replace("&","§");
 			
+			// Items Section
 			item = items.getInt("item");
 			amount = items.getInt("amount");
 			data = items.getInt("data");
+			
+			// Spawn Section
+			x = spawn.getInt("x");
+			y = spawn.getInt("y");
+			z = spawn.getInt("z");
+			pitch = spawn.getInt("pitch");
+			yaw = spawn.getInt("yaw");
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, "Unable to load config!", ex);

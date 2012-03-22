@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import me.chaseoes.firstjoinplus.FirstJoinPlusPlayerListener;
@@ -34,35 +35,42 @@ public class FirstJoinPlus extends JavaPlugin {
 
 		// Config
 		config = getConfig();
-
 		try {
 			this.config.options().copyDefaults(true);
 			saveConfig();
 			Config.initialize(this.config, getDataFolder(), getLogger());
 		}
-
 		catch (Exception ex) {
 			getLogger().log(Level.SEVERE, "Could not load config!", ex);
 		}
-
 	}
 	
+	// Reload Command
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
-        if (strings.length < 1) { 
-            cs.sendMessage(ChatColor.RED + "Usage: /firstjoinplus reload");
-            return true;
-        }
-        String option = strings[0];
-        if(option.equalsIgnoreCase("reload")) {
-            if(strings.length != 2) { // Check the number of arguments.
-            }
-            
-        	this.reloadConfig();
-        	cs.sendMessage(ChatColor.RED + "Sucessfully reloaded the FirstJoinPlus config!");
-        	return true;
-        }
-        return true;
+    	Player player = (Player) cs;
+    	
+    	if(cmnd.getName().equalsIgnoreCase("firstjoinplus")){ 
+    		if(!cs.isOp()){
+                player.sendMessage(ChatColor.RED + "Sorry, " + cs.getName() + ", you need to be an op to do that.");
+                return true;
+    		} 
+    		else {
+    			if (strings.length < 1) { 
+    				cs.sendMessage(ChatColor.RED + "Usage: /firstjoinplus reload");
+    				return true;
+    			}
+    			String option = strings[0];
+    			if(option.equalsIgnoreCase("reload")) {
+    				if(strings.length != 2) { }
+    				this.reloadConfig();
+    				cs.sendMessage(ChatColor.RED + "Sucessfully reloaded the FirstJoinPlus config!");
+    				return true;
+    			}
+    		return true;
+    		}
+    	}
+    return true;
     }
 
 }
