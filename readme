@@ -1,2 +1,13 @@
 FirstJoinPlus v1.1
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.1
+Config has completely changed - if updating, please delete your current one and let the new one automatically generate when you restart.
+Added variables and color codes to the config, use %name% and %number%.
+Added ability to use standard color codes throughout all messages as much as you wish.
+Added options to disable the first join messages, join messages, and kick messages.
+Added option to display the unique amount of players in total that have joined.
+Added ability to give players who join for the first time a configurable item (use the data value for the item). Amount is the amount of that item to give, and data is the data/damage value of it (used for colored wool etc., normally left at 0).
+
+v1.0
+Initial Release.
