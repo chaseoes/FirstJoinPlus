@@ -14,7 +14,6 @@ Added support to show the player's display name instead of their username in all
 Added support for other chat plugins to handle the join/leave/kick messages (if those options are disabled).
 Fixed the /firstjoinplus reload command (it works now!).
 Fixed the blank "ghost lines" from showing if join/leave/kick messages were disabled.
-
 Code cleanup!
 
 v1.1
