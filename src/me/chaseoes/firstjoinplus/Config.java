@@ -1,6 +1,7 @@
 package me.chaseoes.firstjoinplus;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,12 +18,15 @@ public class Config {
 	public static Boolean showjoinmessage;
 	public static Boolean showleavemessage;
 	public static Boolean showkickmessage;
+	public static Boolean firstjoinspawning;
+	public static Boolean firstjoinmotd;
 	
 	public static String firstjoinmessage;
 	public static String joinmessage;
 	public static String leavemessage;
 	public static String kickmessage;
 	public static String numbermessage;
+	public static List<String> motdmsg;
 	
 	public static Integer item;
 	public static Integer amount;
@@ -44,7 +48,6 @@ public class Config {
 
 			ConfigurationSection settings = config.getConfigurationSection("settings");
 			ConfigurationSection messages = config.getConfigurationSection("messages");
-			ConfigurationSection items = config.getConfigurationSection("items");
 			ConfigurationSection spawn = config.getConfigurationSection("spawn");
 
 			// Settings Section
@@ -56,6 +59,8 @@ public class Config {
 			showjoinmessage = settings.getBoolean("showjoinmessage");
 			showleavemessage = settings.getBoolean("showleavemessage");
 			showkickmessage = settings.getBoolean("showkickmessage");
+			firstjoinspawning = settings.getBoolean("firstjoinspawning");
+			firstjoinmotd = settings.getBoolean("firstjoinmotd");
 
 			// Messages Section
 			firstjoinmessage = messages.getString("firstjoinmessage").replace("&", "§");
@@ -65,9 +70,6 @@ public class Config {
 			numbermessage = messages.getString("numbermessage").replace("&","§");
 			
 			// Items Section
-			item = items.getInt("item");
-			amount = items.getInt("amount");
-			data = items.getInt("data");
 			
 			// Spawn Section
 			x = spawn.getInt("x");
@@ -75,6 +77,7 @@ public class Config {
 			z = spawn.getInt("z");
 			pitch = spawn.getInt("pitch");
 			yaw = spawn.getInt("yaw");
+			
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, "Unable to load config!", ex);

@@ -1,10 +1,14 @@
-## FirstJoin Config File - Note: spawn section not used yet (possibly in 1.2)! ##
+## FirstJoinPlus Configuration - Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
 settings:
+    onlyfirstjoin: false
     worldname: world
     debug: false
-    numberonjoin: true
-    itemonjoin: false
+    itemonfirstjoin: false
+    firstjoinspawning: false
     showfirstjoinmessage: true
+    showfirstjoinmotd: true
+    numberonfirstjoin: false
+    numberonjoin: false
     showjoinmessage: true
     showleavemessage: true
     showkickmessage: true
@@ -15,9 +19,10 @@ messages:
     kickmessage: "&e%name% was kicked from the game!"
     numbermessage: "&d%number% unique players have joined the server!"
 items:
-    item: 264
-    amount: 1
-    data: 0
+   - 57.32.0
+motd:
+    - '&bWelcome to our server, &6%name%&b!'
+    - '&4This message can be customized in the FirstJoinPlus config!'
 spawn:
     x: 1
     y: 1

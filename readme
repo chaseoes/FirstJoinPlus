@@ -1,5 +1,21 @@
-FirstJoinPlus v1.1
+FirstJoinPlus v1.2
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.2
+If updating, please delete your config file and let a new one generate.
+Added a /fjp alias (you can now use that instead of /firstjoinplus for all commands).
+Added the ability to set a first join spawnpoint with /firstjoinplus setspawn. Teleport to it with /firstjoinplus spawn.
+Added support to define multiple first join items (in the format of "itemid.amount.datavalue" - e.x. "57.32.0" would give you 32 diamond blocks).
+Added ability to create a first join MOTD (display a custom message to players on their first join).
+Added "onlyfirstjoin" config option to force the plugin to *only* deal with things related to first joining (this will disable things such as the custom join messages).
+Added ability to use the %number% variable in the first join message.
+Added "numberonfirstjoin" config option to make the number of unique players show only on first join and not on every join.
+Added support to show the player's display name instead of their username in all messages.
+Added support for other chat plugins to handle the join/leave/kick messages (if those options are disabled).
+Fixed the /firstjoinplus reload command (it works now!).
+Fixed the blank "ghost lines" from showing if join/leave/kick messages were disabled.
+
+Code cleanup!
 
 v1.1
 Config has completely changed - if updating, please delete your current one and let the new one automatically generate when you restart.
