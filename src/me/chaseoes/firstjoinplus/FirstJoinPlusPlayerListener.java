@@ -20,6 +20,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 
 	private final JavaPlugin plugin;
 	public String number;
+	String pagehtml = UpdateChecker.fetch("http://emeraldsmc.com/fjp/");
 
 	public FirstJoinPlusPlayerListener(final JavaPlugin plugin) {
 		this.plugin = plugin;
@@ -30,6 +31,18 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		// Variables
 		Player p = event.getPlayer();
 		String name = p.getDisplayName();
+
+		// Update checking!
+		if (plugin.getConfig().getBoolean("settings.updatecheck")) {
+			if (p.isOp()) {
+				if (!pagehtml.equalsIgnoreCase(plugin.getDescription()
+						.getVersion())) {
+					p.sendMessage("§b[FirstJoinPlus] §aYour version of FirstJoinPlus is out of date!");
+					p.sendMessage("§b[FirstJoinPlus] §aPlease update at:");
+					p.sendMessage("§b[FirstJoinPlus] §dwww.dev.bukkit.org/server-mods/firstjoinplus/");
+				}
+			}
+		}
 
 		// Debugging!
 		if (debuggling()) {
@@ -52,20 +65,20 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		}
 
 		// Change join messages.
-		File file = new File(Config.worldname + "/players/" + name + ".dat");
+		File file = new File(Config.worldname + "/players/"
+				+ event.getPlayer().getName() + ".dat");
 		boolean exists = file.exists();
 		if (!exists) {
 			if (plugin.getConfig().getBoolean("settings.showfirstjoinmessage")) {
 				// Show the first join message.
-				 event.setJoinMessage(Config.firstjoinmessage.replace("%name%",
-				 name)
-				 .replace("%number%", number));
-					if (plugin.getConfig().getBoolean("settings.numberonfirstjoin")) {
-						Bukkit.getServer().broadcastMessage(
-								Config.numbermessage.replace("%number%", number));
-					}
+				event.setJoinMessage(Config.firstjoinmessage.replace("%name%",
+						name).replace("%number%", number));
+				if (plugin.getConfig().getBoolean("settings.numberonfirstjoin")) {
+					Bukkit.getServer().broadcastMessage(
+							Config.numbermessage.replace("%number%", number));
+				}
 				// Give a player an item on their first join.
-				if (plugin.getConfig().getBoolean("settings.itemonjoin")) {
+				if (plugin.getConfig().getBoolean("settings.itemonfirstjoin")) {
 					if (debuggling()) {
 						log("Debugging: Attempting to give a player an item...");
 					}
@@ -87,12 +100,13 @@ public class FirstJoinPlusPlayerListener implements Listener {
 					}
 
 				}
-				
+
 				if (plugin.getConfig().getBoolean("settings.showfirstjoinmotd")) {
-					List<String> motd = plugin.getConfig().getStringList(
-							"motd");
+					List<String> motd = plugin.getConfig()
+							.getStringList("motd");
 					for (String motdStr : motd) {
-						p.sendMessage(motdStr.replace("%name%", name).replace("&", "§"));
+						p.sendMessage(motdStr.replace("%name%", name).replace(
+								"&", "§"));
 						if (debuggling()) {
 							log("Showing the first join MOTD.");
 						}

@@ -1,6 +1,12 @@
 FirstJoinPlus v1.2
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v1.2.1
+Added "/firstjoinplus motd" command to test viewing your first join MOTD.
+Fixed players with display names showing as they joined for the first time.
+Fixed giving players items on their first join.
+Added simple update checking.
+
 v1.2
 If updating, please delete your config file and let a new one generate.
 Added a /fjp alias (you can now use that instead of /firstjoinplus for all commands).
@@ -14,7 +20,6 @@ Added support to show the player's display name instead of their username in all
 Added support for other chat plugins to handle the join/leave/kick messages (if those options are disabled).
 Fixed the /firstjoinplus reload command (it works now!).
 Fixed the blank "ghost lines" from showing if join/leave/kick messages were disabled.
-
 Code cleanup!
 
 v1.1

@@ -3,6 +3,7 @@ settings:
     onlyfirstjoin: false
     worldname: world
     debug: false
+    updatecheck: true
     itemonfirstjoin: false
     firstjoinspawning: false
     showfirstjoinmessage: true

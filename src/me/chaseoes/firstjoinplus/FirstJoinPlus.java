@@ -1,5 +1,6 @@
 package me.chaseoes.firstjoinplus;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,7 +60,7 @@ public class FirstJoinPlus extends JavaPlugin {
 			}
 			if (strings.length < 1) {
 				cs.sendMessage(ChatColor.RED
-						+ "Usage: /firstjoinplus <reload|setspawn|spawn>");
+						+ "Usage: /firstjoinplus <reload|setspawn|spawn|motd>");
 				return true;
 			}
 			if (strings[0].equalsIgnoreCase("reload")) {
@@ -70,7 +71,13 @@ public class FirstJoinPlus extends JavaPlugin {
 				return true;
 			}
 			if (strings[0].equalsIgnoreCase("motd")) {
-
+				Player ps = (Player) cs;
+				String pc = ps.getDisplayName();
+				List<String> motd = this.getConfig().getStringList("motd");
+				for (String motdStr : motd) {
+					ps.sendMessage(motdStr.replace("%name%", pc).replace("&",
+							"§"));
+				}
 				return true;
 			}
 			if (strings[0].equalsIgnoreCase("setspawn")) {
