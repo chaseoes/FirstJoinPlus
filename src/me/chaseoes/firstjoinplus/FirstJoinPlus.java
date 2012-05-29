@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,8 +15,7 @@ import me.chaseoes.firstjoinplus.FirstJoinPlusPlayerListener;
 
 public class FirstJoinPlus extends JavaPlugin {
 
-	public FileConfiguration config;
-	public static final Logger log = Logger.getLogger("Minecraft");
+	public final Logger log = Logger.getLogger("Minecraft");
 
 	public void onDisable() {
 		log.info("[FirstJoinPlus] Version" + getDescription().getVersion()
@@ -26,6 +23,7 @@ public class FirstJoinPlus extends JavaPlugin {
 	}
 
 	public void onEnable() {
+		// Sorry TnT! Is verbose-logging really required for one line? ;)
 		log.info("[FirstJoinPlus] Version " + getDescription().getVersion()
 				+ " by chaseoes" + " has been enabled!");
 
@@ -34,13 +32,13 @@ public class FirstJoinPlus extends JavaPlugin {
 		pm.registerEvents(new FirstJoinPlusPlayerListener(this), this);
 
 		// Configuration
-		config = getConfig();
-		this.config.options().copyDefaults(true);
-		saveConfig();
 		try {
-			this.config.options().copyDefaults(true);
+			getConfig().options().copyDefaults(true);
+			getConfig()
+					.options()
+					.header("FirstJoinPlus v1.3 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
+			getConfig().options().copyHeader(true);
 			saveConfig();
-			Config.initialize(this.config, getDataFolder(), getLogger());
 		} catch (Exception ex) {
 			getLogger().log(Level.SEVERE,
 					"[FirstJoinPlus] Could not load configuration!", ex);
@@ -51,81 +49,79 @@ public class FirstJoinPlus extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmnd, String string,
 			String[] strings) {
-		Player player = (Player) cs;
 		if (cmnd.getName().equalsIgnoreCase("firstjoinplus")) {
-			if (!cs.isOp()) {
-				player.sendMessage(ChatColor.RED + "Sorry, " + cs.getName()
-						+ ", you need to be an op to do that.");
-				return true;
-			}
-			if (strings.length < 1) {
-				cs.sendMessage(ChatColor.RED
-						+ "Usage: /firstjoinplus <reload|setspawn|spawn|motd>");
-				return true;
-			}
-			if (strings[0].equalsIgnoreCase("reload")) {
-				this.reloadConfig();
-				this.saveConfig();
-				cs.sendMessage(ChatColor.RED
-						+ "Sucessfully reloaded the FirstJoinPlus config!");
-				return true;
-			}
-			if (strings[0].equalsIgnoreCase("motd")) {
-				Player ps = (Player) cs;
-				String pc = ps.getDisplayName();
-				List<String> motd = this.getConfig().getStringList("motd");
-				for (String motdStr : motd) {
-					ps.sendMessage(motdStr.replace("%name%", pc).replace("&",
-							"§"));
-				}
-				return true;
-			}
-			if (strings[0].equalsIgnoreCase("setspawn")) {
-				if (!this.getConfig().getBoolean("settings.firstjoinspawning")) {
-					cs.sendMessage(ChatColor.GREEN
-							+ "Please enable 'firstjoinspawning' in the FirstJoinPlus config to do this.");
+			if (cs instanceof Player) {
+				Player player = (Player) cs;
+				if (!cs.isOp()) {
+					player.sendMessage("§cSorry, " + player.getDisplayName()
+							+ "§c, you need to be an op to do that.");
 					return true;
 				}
-				if (strings.length != 2) {
-				}
-				Player p = (Player) cs;
-				int x = p.getLocation().getBlockX();
-				int y = p.getLocation().getBlockY();
-				int z = p.getLocation().getBlockZ();
-				float pitch = p.getLocation().getPitch();
-				float yaw = p.getLocation().getYaw();
-				getConfig().set("spawn.x", x);
-				getConfig().set("spawn.y", y);
-				getConfig().set("spawn.z", z);
-				getConfig().set("spawn.pitch", pitch);
-				getConfig().set("spawn.yaw", yaw);
-				saveConfig();
-				cs.sendMessage(ChatColor.GREEN
-						+ "Sucessfully set the FirstJoinPlus spawnpoint!");
-				return true;
-			}
-			if (strings[0].equalsIgnoreCase("spawn")) {
-				if (!this.getConfig().getBoolean("settings.firstjoinspawning")) {
-					cs.sendMessage(ChatColor.GREEN
-							+ "Please enable 'firstjoinspawning' in the FirstJoinPlus config to do this.");
+				if (strings.length < 1 || strings.length > 1) {
+					cs.sendMessage("§cUsage: /firstjoinplus <reload|setspawn|spawn|motd>");
 					return true;
 				}
-				if (strings.length != 2) {
+				if (strings[0].equalsIgnoreCase("reload")) {
+					this.reloadConfig();
+					this.saveConfig();
+					cs.sendMessage("§aSucessfully reloaded the FirstJoinPlus config!");
+					return true;
 				}
-				Player p = (Player) cs;
-				int x = getConfig().getInt("spawn.x");
-				int y = getConfig().getInt("spawn.y");
-				int z = getConfig().getInt("spawn.z");
-				float pitch = getConfig().getInt("spawn.pitch");
-				float yaw = getConfig().getInt("spawn.yaw");
-				p.teleport(new Location(p.getWorld(), x, y, z, yaw, pitch));
-				cs.sendMessage(ChatColor.GREEN
-						+ "Sucessfully teleported to the FirstJoinPlus spawnpoint!");
-				return true;
+				if (strings[0].equalsIgnoreCase("motd")) {
+					String pc = player.getDisplayName();
+					List<String> motd = this.getConfig().getStringList("motd");
+					for (String motdStr : motd) {
+						player.sendMessage(motdStr.replace("%name%", pc)
+								.replace("&", "§"));
+					}
+					return true;
+				}
+
+				if (strings[0].equalsIgnoreCase("setspawn")) {
+					if (!getConfig().getBoolean("settings.firstjoinspawning")) {
+						cs.sendMessage("§cPlease enable 'firstjoinspawning' in the FirstJoinPlus config to do this.");
+						return true;
+					}
+					int x = player.getLocation().getBlockX();
+					int y = player.getLocation().getBlockY();
+					int z = player.getLocation().getBlockZ();
+					float pitch = player.getLocation().getPitch();
+					float yaw = player.getLocation().getYaw();
+					getConfig().set("spawn.x", x);
+					getConfig().set("spawn.y", y);
+					getConfig().set("spawn.z", z);
+					getConfig().set("spawn.pitch", pitch);
+					getConfig().set("spawn.yaw", yaw);
+					saveConfig();
+					cs.sendMessage("§aSucessfully set the FirstJoinPlus spawnpoint!");
+					return true;
+				}
+
+				if (strings[0].equalsIgnoreCase("spawn")) {
+					if (!getConfig().getBoolean("settings.firstjoinspawning")) {
+						player.sendMessage("§cPlease enable 'firstjoinspawning' in the FirstJoinPlus config to do this.");
+						return true;
+					}
+					teleportToFirstSpawn(player);
+					cs.sendMessage("§aSucessfully teleported to the FirstJoinPlus spawnpoint!");
+					return true;
+				}
+			} else {
+				cs.sendMessage("That command can only be used ingame.");
 			}
 			return true;
 		}
 		return true;
+	}
+
+	// Teleport player to the FirstJoinSpawnPoint.
+	public void teleportToFirstSpawn(Player player) {
+		int x = getConfig().getInt("spawn.x");
+		int y = getConfig().getInt("spawn.y");
+		int z = getConfig().getInt("spawn.z");
+		float pitch = getConfig().getInt("spawn.pitch");
+		float yaw = getConfig().getInt("spawn.yaw");
+		player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
 	}
 
 }

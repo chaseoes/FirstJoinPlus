@@ -1,5 +1,12 @@
-FirstJoinPlus v1.2
+FirstJoinPlus v1.3
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.3
+Added option to play a smoke effect on first join.
+Fixed some possible issues with the configuraton reloading properly when using the /firstjoinplus reload command.
+Fixed a possible with not being teleported to the first join spawnpoint on first join.
+Fixed some issues with display names not being used on quit & kick messages.
+Built with the latest RB, guarantees Craftbukkit 1.2.5-R3.0 compatibility.
 
 v1.2.1
 Added "/firstjoinplus motd" command to test viewing your first join MOTD.

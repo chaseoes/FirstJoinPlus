@@ -1,9 +1,11 @@
 package me.chaseoes.firstjoinplus;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.io.*;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -19,8 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FirstJoinPlusPlayerListener implements Listener {
 
 	private final JavaPlugin plugin;
+	public final Logger log = Logger.getLogger("Minecraft");
 	public String number;
-	String pagehtml = UpdateChecker.fetch("http://emeraldsmc.com/fjp/");
 
 	public FirstJoinPlusPlayerListener(final JavaPlugin plugin) {
 		this.plugin = plugin;
@@ -28,20 +30,16 @@ public class FirstJoinPlusPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onJoinLogin(PlayerJoinEvent event) {
-		// Variables
-		Player p = event.getPlayer();
-		String name = p.getDisplayName();
+		// Define our variables!
+		Player player = event.getPlayer();
+		String playername = event.getPlayer().getDisplayName();
 
 		// Update checking!
-		if (plugin.getConfig().getBoolean("settings.updatecheck")) {
-			if (p.isOp()) {
-				if (!pagehtml.equalsIgnoreCase(plugin.getDescription()
-						.getVersion())) {
-					p.sendMessage("§b[FirstJoinPlus] §aYour version of FirstJoinPlus is out of date!");
-					p.sendMessage("§b[FirstJoinPlus] §aPlease update at:");
-					p.sendMessage("§b[FirstJoinPlus] §dwww.dev.bukkit.org/server-mods/firstjoinplus/");
-				}
-			}
+		if (plugin.getConfig().getBoolean("settings.updatecheck")
+				&& player.isOp() && needsUpdate()) {
+			player.sendMessage("§b[FirstJoinPlus] Your version of FirstJoinPlus is out of date!");
+			player.sendMessage("§b[FirstJoinPlus] Please update at:");
+			player.sendMessage("§b[FirstJoinPlus] §dwww.dev.bukkit.org/server-mods/firstjoinplus/");
 		}
 
 		// Debugging!
@@ -50,7 +48,8 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		}
 
 		// Define the amount of players who have joined in total.
-		File f = new File(Config.worldname + "/players/");
+		File f = new File(plugin.getConfig().getString("settings.worldname")
+				+ "/players/");
 		int count = 0;
 		for (File file : f.listFiles()) {
 			if (file.isFile()) {
@@ -58,101 +57,109 @@ public class FirstJoinPlusPlayerListener implements Listener {
 				number = "" + count;
 			}
 		}
-		// Broadcast that amount.
-		if (plugin.getConfig().getBoolean("settings.numberonjoin")) {
-			Bukkit.getServer().broadcastMessage(
-					Config.numbermessage.replace("%number%", number));
-		}
 
-		// Change join messages.
-		File file = new File(Config.worldname + "/players/"
-				+ event.getPlayer().getName() + ".dat");
+		// Check if it's their first join.
+		File file = new File(plugin.getConfig().getString("settings.worldname")
+				+ "/players/" + player.getName() + ".dat");
 		boolean exists = file.exists();
 		if (!exists) {
+
+			// Show the first join message.
 			if (plugin.getConfig().getBoolean("settings.showfirstjoinmessage")) {
-				// Show the first join message.
-				event.setJoinMessage(Config.firstjoinmessage.replace("%name%",
-						name).replace("%number%", number));
-				if (plugin.getConfig().getBoolean("settings.numberonfirstjoin")) {
-					Bukkit.getServer().broadcastMessage(
-							Config.numbermessage.replace("%number%", number));
+				String firstjoinmessage = plugin.getConfig()
+						.getString("messages.firstjoinmessage")
+						.replace("%name%", playername).replace("&", "§")
+						.replace("%number%", number);
+				event.setJoinMessage(firstjoinmessage);
+			}
+
+			// Show the number of players who have joined in total.
+			if (plugin.getConfig().getBoolean("settings.numberonfirstjoin")) {
+				Bukkit.getServer().broadcastMessage(
+						plugin.getConfig().getString("messages.numbermessage")
+								.replace("%number%", number).replace("&", "§"));
+			}
+
+			// Give a player an item on their first join.
+			if (plugin.getConfig().getBoolean("settings.itemonfirstjoin")) {
+				if (debuggling()) {
+					log("Debugging: Attempting to give a player an item...");
 				}
-				// Give a player an item on their first join.
-				if (plugin.getConfig().getBoolean("settings.itemonfirstjoin")) {
+				List<String> items = plugin.getConfig().getStringList("items");
+				for (String itemStr : items) {
+					PlayerInventory inventory = player.getInventory();
+					Integer itemtogive = Integer
+							.parseInt(itemStr.split("\\.")[0]);
+					Integer amount = Integer.parseInt(itemStr.split("\\.")[1]);
+					Byte data = Byte.parseByte(itemStr.split("\\.")[2]);
+					ItemStack istack = new ItemStack(itemtogive, amount,
+							(short) 0, (byte) data);
+					inventory.addItem(istack);
 					if (debuggling()) {
-						log("Debugging: Attempting to give a player an item...");
-					}
-					List<String> items = plugin.getConfig().getStringList(
-							"items");
-					for (String itemStr : items) {
-						PlayerInventory inventory = p.getInventory();
-						Integer itemtogive = Integer.parseInt(itemStr
-								.split("\\.")[0]);
-						Integer amount = Integer
-								.parseInt(itemStr.split("\\.")[1]);
-						Byte data = Byte.parseByte(itemStr.split("\\.")[2]);
-						ItemStack istack = new ItemStack(itemtogive, amount,
-								(short) 0, (byte) data);
-						inventory.addItem(istack);
-						if (debuggling()) {
-							log("Debugging: Gave the player the item.");
-						}
-					}
-
-				}
-
-				if (plugin.getConfig().getBoolean("settings.showfirstjoinmotd")) {
-					List<String> motd = plugin.getConfig()
-							.getStringList("motd");
-					for (String motdStr : motd) {
-						p.sendMessage(motdStr.replace("%name%", name).replace(
-								"&", "§"));
-						if (debuggling()) {
-							log("Showing the first join MOTD.");
-						}
+						log("Debugging: Gave the player the item.");
 					}
 				}
 
-				// Teleport the player to the first join spawnpoint.
-				if (plugin.getConfig().getBoolean("settings.firstjoinspawning")) {
-					int x = plugin.getConfig().getInt("spawn.x");
-					int y = plugin.getConfig().getInt("spawn.y");
-					int z = plugin.getConfig().getInt("spawn.z");
-					float pitch = plugin.getConfig().getInt("spawn.pitch");
-					float yaw = plugin.getConfig().getInt("spawn.yaw");
-					p.teleport(new Location(p.getWorld(), x, y, z, yaw, pitch));
-				}
+			}
 
-			} else {
-				if (!onlyfirstjoin()) {
-					event.setJoinMessage(null);
+			// Show the first join MOTD.
+			if (plugin.getConfig().getBoolean("settings.showfirstjoinmotd")) {
+				List<String> motd = plugin.getConfig().getStringList("motd");
+				for (String motdStr : motd) {
+					player.sendMessage(motdStr.replace("%name%", playername)
+							.replace("&", "§"));
+					if (debuggling()) {
+						log("Debugging: Showing the first join MOTD.");
+					}
 				}
 			}
+
+			// Teleport the player to the first join spawnpoint.
+			if (plugin.getConfig().getBoolean("settings.firstjoinspawning")) {
+				if (debuggling()) {
+					log("Debugging: First join spawning enabled - teleporting the player to the first join spawnpoint.");
+				}
+				teleportToFirstSpawn(player);
+			}
+
+			// Show some fancy smoke!
+			if (plugin.getConfig().getBoolean("settings.showfirstjoinsmoke")) {
+				if (debuggling()) {
+					log("Debugging: Someone is 'smokin on their join!");
+				}
+				for (int i = 0; i <= 18; i++)
+					player.getWorld().playEffect(player.getLocation(),
+							Effect.SMOKE, i);
+			}
+
 		} else {
 			if (plugin.getConfig().getBoolean("settings.showjoinmessage")) {
 				if (!onlyfirstjoin()) {
-					event.setJoinMessage(Config.joinmessage.replace("%name%",
-							name));
+					event.setJoinMessage(plugin.getConfig()
+							.getString("messages.joinmessage")
+							.replace("%name%", playername).replace("&", "§"));
 				}
 			} else {
-				// If the join message is disabled.
-				if (!onlyfirstjoin()) {
-					event.setJoinMessage(null);
-				}
+				event.setJoinMessage(null);
+			}
+			if (plugin.getConfig().getBoolean("settings.numberonjoin")) {
+				Bukkit.getServer().broadcastMessage(
+						plugin.getConfig().getString("messages.numbermessage")
+								.replace("%number%", number).replace("&", "§"));
 			}
 		}
-
 	}
 
 	// Change quit message.
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if (!onlyfirstjoin()) {
-			Player p = event.getPlayer();
-			String name = p.getName();
+			Player player = event.getPlayer();
+			String playername = player.getDisplayName();
 			if (plugin.getConfig().getBoolean("settings.showleavemessage")) {
-				String qmessage = Config.leavemessage.replace("%name%", name);
-				event.setQuitMessage(qmessage);
+				event.setQuitMessage(plugin.getConfig()
+						.getString("messages.leavemessage")
+						.replace("%name%", playername).replace("&", "§"));
 			} else {
 				event.setQuitMessage(null);
 			}
@@ -166,11 +173,12 @@ public class FirstJoinPlusPlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerKick(PlayerKickEvent event) {
 		if (!onlyfirstjoin()) {
-			Player p = event.getPlayer();
-			String name = p.getName();
+			Player player = event.getPlayer();
+			String playername = player.getDisplayName();
 			if (plugin.getConfig().getBoolean("settings.showkickmessage")) {
-				event.setLeaveMessage(Config.kickmessage
-						.replace("%name%", name));
+				event.setLeaveMessage(plugin.getConfig()
+						.getString("messages.kickmessage")
+						.replace("%name%", playername).replace("&", "§"));
 			} else {
 				event.setLeaveMessage(null);
 			}
@@ -181,7 +189,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 	}
 
 	public void log(String l) {
-		System.out.println("[FirstJoinPlus] " + l);
+		log.info("[FirstJoinPlus] " + l);
 	}
 
 	public boolean debuggling() {
@@ -197,6 +205,24 @@ public class FirstJoinPlusPlayerListener implements Listener {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void teleportToFirstSpawn(Player player) {
+		int x = plugin.getConfig().getInt("spawn.x");
+		int y = plugin.getConfig().getInt("spawn.y");
+		int z = plugin.getConfig().getInt("spawn.z");
+		float pitch = plugin.getConfig().getInt("spawn.pitch");
+		float yaw = plugin.getConfig().getInt("spawn.yaw");
+		player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
+	}
+
+	public boolean needsUpdate() {
+		String pageurl = UpdateChecker.fetch("http://emeraldsmc.com/fjp/");
+		if (pageurl.equalsIgnoreCase(plugin.getDescription().getVersion())) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 

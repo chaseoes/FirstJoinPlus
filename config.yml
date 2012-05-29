@@ -1,4 +1,4 @@
-## FirstJoinPlus Configuration - Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
+## FirstJoinPlus v1.3 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
 settings:
     onlyfirstjoin: false
     worldname: world
@@ -8,6 +8,7 @@ settings:
     firstjoinspawning: false
     showfirstjoinmessage: true
     showfirstjoinmotd: true
+    showfirstjoinsmoke: true
     numberonfirstjoin: false
     numberonjoin: false
     showjoinmessage: true
