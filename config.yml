@@ -1,4 +1,4 @@
-## FirstJoinPlus v1.3 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
+## FirstJoinPlus v1.4 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
 settings:
     onlyfirstjoin: false
     worldname: world
@@ -10,7 +10,7 @@ settings:
     showfirstjoinmotd: true
     showfirstjoinsmoke: true
     numberonfirstjoin: false
-    numberonjoin: false
+    commandsonfirstjoin: false
     showjoinmessage: true
     showleavemessage: true
     showkickmessage: true
@@ -25,6 +25,8 @@ items:
 motd:
     - '&bWelcome to our server, &6%name%&b!'
     - '&4This message can be customized in the FirstJoinPlus config!'
+commands:
+    - 'me just joined for the first time!'
 spawn:
     x: 1
     y: 1

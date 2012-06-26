@@ -1,5 +1,12 @@
-FirstJoinPlus v1.3
+FirstJoinPlus v1.4
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.4
+Added /firstjoinplus items command to test your items section in the configuration and give yourself those items as if you were new.
+Added support for GeoIPTools (use the variables %city% and %country%).
+Added ability to force the player to run commands on first join.
+Fixed possible issues for people having problems with first join spawning and/or getting errors when players join.
+Built with the latest RB, guarantees Craftbukkit 1.2.5-R4.0 compatibility.
 
 v1.3
 Added option to play a smoke effect on first join.

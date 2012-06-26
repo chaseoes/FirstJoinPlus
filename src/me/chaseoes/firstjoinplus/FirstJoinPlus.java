@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,14 +20,12 @@ public class FirstJoinPlus extends JavaPlugin {
 	public final Logger log = Logger.getLogger("Minecraft");
 
 	public void onDisable() {
-		log.info("[FirstJoinPlus] Version" + getDescription().getVersion()
-				+ " by chaseoes" + " has been disabled!");
+		log.info("[FirstJoinPlus] Version" + getDescription().getVersion() + " by chaseoes" + " has been disabled!");
 	}
 
 	public void onEnable() {
 		// Sorry TnT! Is verbose-logging really required for one line? ;)
-		log.info("[FirstJoinPlus] Version " + getDescription().getVersion()
-				+ " by chaseoes" + " has been enabled!");
+		log.info("[FirstJoinPlus] Version " + getDescription().getVersion() + " by chaseoes" + " has been enabled!");
 
 		// Listener Registration
 		PluginManager pm = getServer().getPluginManager();
@@ -36,7 +36,7 @@ public class FirstJoinPlus extends JavaPlugin {
 			getConfig().options().copyDefaults(true);
 			getConfig()
 					.options()
-					.header("FirstJoinPlus v1.3 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
+					.header("FirstJoinPlus v1.4 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
 			getConfig().options().copyHeader(true);
 			saveConfig();
 		} catch (Exception ex) {
@@ -58,7 +58,7 @@ public class FirstJoinPlus extends JavaPlugin {
 					return true;
 				}
 				if (strings.length < 1 || strings.length > 1) {
-					cs.sendMessage("§cUsage: /firstjoinplus <reload|setspawn|spawn|motd>");
+					cs.sendMessage("§cUsage: /firstjoinplus <reload|setspawn|spawn|items|motd>");
 					return true;
 				}
 				if (strings[0].equalsIgnoreCase("reload")) {
@@ -94,6 +94,26 @@ public class FirstJoinPlus extends JavaPlugin {
 					getConfig().set("spawn.yaw", yaw);
 					saveConfig();
 					cs.sendMessage("§aSucessfully set the FirstJoinPlus spawnpoint!");
+					return true;
+				}
+				
+				if (strings[0].equalsIgnoreCase("items")) {
+					if (!getConfig().getBoolean("settings.itemonfirstjoin")) {
+						cs.sendMessage("§cPlease enable 'itemonfirstjoin' in the FirstJoinPlus config to do that.");
+						return true;
+					}
+					List<String> items = getConfig().getStringList("items");
+					for (String itemStr : items) {
+						PlayerInventory inventory = player.getInventory();
+						Integer itemtogive = Integer
+								.parseInt(itemStr.split("\\.")[0]);
+						Integer amount = Integer.parseInt(itemStr.split("\\.")[1]);
+						Byte data = Byte.parseByte(itemStr.split("\\.")[2]);
+						ItemStack istack = new ItemStack(itemtogive, amount,
+								(short) 0, (byte) data);
+						inventory.addItem(istack);
+					}
+					cs.sendMessage("§aSucessfully gave you all items defined in the configuration.");
 					return true;
 				}
 
