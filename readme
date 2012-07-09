@@ -1,6 +1,12 @@
 FirstJoinPlus v1.4
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v1.4.1
+Changed %name% variable to be the player's real name, added %displayname% for their displayname.
+Fixed setting the first join spawnpoint in a different world.
+Fixed some NullPointer exceptions when joining/leaving.
+Fixed various other things (such as first join spawning again).
+
 v1.4
 Added /firstjoinplus items command to test your items section in the configuration and give yourself those items as if you were new.
 Added support for GeoIPTools (use the variables %city% and %country%).

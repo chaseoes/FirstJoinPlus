@@ -11,15 +11,16 @@ settings:
     showfirstjoinsmoke: true
     numberonfirstjoin: false
     commandsonfirstjoin: false
+    numberonjoin: false
     showjoinmessage: true
     showleavemessage: true
     showkickmessage: true
 messages:
-    firstjoinmessage: "&d%name% has joined the game for the first time!"
-    joinmessage: "&e%name% has joined the game."
-    leavemessage: "&e%name% has left the game."
-    kickmessage: "&e%name% was kicked from the game!"
-    numbermessage: "&d%number% unique players have joined the server!"
+    firstjoinmessage: '&d%name% has joined the game for the first time!'
+    joinmessage: '&e%name% has joined the game.'
+    leavemessage: '&e%name% has left the game.'
+    kickmessage: '&e%name% was kicked from the game!'
+    numbermessage: '&d%number% unique players have joined the server!'
 items:
    - 57.32.0
 motd:
@@ -33,3 +34,4 @@ spawn:
     z: 1
     pitch: 1
     yaw: 1
+    world: world

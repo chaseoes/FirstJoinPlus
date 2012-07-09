@@ -1,6 +1,6 @@
 name: FirstJoinPlus
 main: me.chaseoes.firstjoinplus.FirstJoinPlus
-version: 1.4
+version: 1.4.1
 dev-url: http://dev.bukkit.org/server-mods/firstjoinplus/
 description: Controls all aspects of when players join for the first time.
 author: chaseoes
@@ -9,4 +9,4 @@ commands:
   firstjoinplus:
     description: The main command for FirstJoinPlus.
     aliases: fjp
-    usage: /firstjoinplus <reload|spawn|setspawn|motd>
+    usage: /firstjoinplus <reload|setspawn|spawn|items|motd>

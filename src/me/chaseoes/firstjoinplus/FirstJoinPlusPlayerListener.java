@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.org.whoami.geoip.GeoIPLookup;
@@ -24,7 +25,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 
 	private final JavaPlugin plugin;
 	public final Logger log = Logger.getLogger("Minecraft");
-	public String number;
+	public String number = "0";
 	public GeoIPLookup geoiptools;
 
 	public FirstJoinPlusPlayerListener(final JavaPlugin plugin) {
@@ -40,7 +41,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		if (plugin.getConfig().getBoolean("settings.updatecheck") && player.isOp() && needsUpdate()) {
 			player.sendMessage("§b[FirstJoinPlus] Your version of FirstJoinPlus is out of date!");
 			player.sendMessage("§b[FirstJoinPlus] Please update at:");
-			player.sendMessage("§b[FirstJoinPlus] §dhttp://www.dev.bukkit.org/server-mods/firstjoinplus/");
+			player.sendMessage("§b[FirstJoinPlus] §dhttp://dev.bukkit.org/server-mods/firstjoinplus/");
 		}
 
 		// Debugging!
@@ -50,14 +51,14 @@ public class FirstJoinPlusPlayerListener implements Listener {
 
 		// Define the amount of players who have joined in total.
 		try {
-		File f = new File(plugin.getConfig().getString("settings.worldname") + "/players/");
-		int count = 0;
-		for (File file : f.listFiles()) {
-			if (file.isFile()) {
-				count++;
-				number = "" + count;
+			File f = new File(plugin.getConfig().getString("settings.worldname") + "/players/");
+			int count = 0;
+			for (File file : f.listFiles()) {
+				if (file.isFile()) {
+					count++;
+					number = "" + count;
+				}
 			}
-		}
 		} catch (NullPointerException ex) {
 			log.severe("[FirstJoinPlus] The 'worldname' option is incorrectly set or player.dat files can not be found!");
 			log.severe("[FirstJoinPlus] Various aspects of the plugin may not work until this is fixed.");
@@ -65,9 +66,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		}
 
 		// Check if it's their first join.
-		File file = new File(plugin.getConfig().getString("settings.worldname") + "/players/" + player.getName() + ".dat");
-		boolean exists = file.exists();
-		if (!exists) {
+		if (!player.hasPlayedBefore()) {
 			// Show the first join message.
 			if (plugin.getConfig().getBoolean("settings.showfirstjoinmessage")) {
 				String firstjoinmessage = format(plugin.getConfig().getString("messages.firstjoinmessage"), player);
@@ -136,7 +135,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 				for (int i = 0; i <= 18; i++)
 					player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
 			}
-			
+
 			// Run some commands!
 			if (plugin.getConfig().getBoolean("settings.commandsonfirstjoin")) {
 				if (debuggling()) {
@@ -220,7 +219,7 @@ public class FirstJoinPlusPlayerListener implements Listener {
 		int z = plugin.getConfig().getInt("spawn.z");
 		float pitch = plugin.getConfig().getInt("spawn.pitch");
 		float yaw = plugin.getConfig().getInt("spawn.yaw");
-		player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
+		player.teleport(new Location(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")), x, y, z, yaw, pitch));
 	}
 
 	public boolean needsUpdate() {
@@ -231,31 +230,57 @@ public class FirstJoinPlusPlayerListener implements Listener {
 			return true;
 		}
 	}
-	
+
 	public String colorize(String s){
 		if(s == null) return null;
 		return s.replaceAll("&([l-o0-9a-f])", "\u00A7$1");
 	}
-	
+
 	public String format(String string, Player player) {
-		String format = string.replace("%name%", player.getDisplayName()).replace("%number%", number).replace("%city%", getCity(player)).replace("%country%", getCountry(player));
+		String format = string
+				.replace("%name%", player.getName())
+				.replace("%displayname%", player.getName());
+		if (format.contains("%number%")) {
+			format = format
+					.replace("%number%", number);
+		}
+		if (format.contains("%city%") || format.contains("%country%") && geoIPInstalled()) {
+			format = format
+					.replace("%city%", getCity(player)).replace("%country%", getCountry(player));
+		}
 		return colorize(format);
 	}
 	
-	public String getCity(Player player) {
-        if (geoiptools != null) {
-                return geoiptools.getLocation(player.getAddress().getAddress()).city;
-        } else {
-            return "unknown";
-        }
-    }
+	public boolean geoIPInstalled() {
+		Plugin plug = plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
+		if (plug != null) {
+			return true;
+		}
+		return false;
+	}
 
-    public String getCountry(Player player) {
-        if (geoiptools != null) {
-                return geoiptools.getCountry(player.getAddress().getAddress()).getName();
-        } else {
-            return "unknown";
-        }
-    }
+	public String getCity(Player player) {
+		if (geoiptools != null) {
+			try {
+				return geoiptools.getLocation(player.getAddress().getAddress()).city;
+			} catch (NullPointerException ex) {
+				return "unknown";
+			}
+		} else {
+			return "unknown";
+		}
+	}
+
+	public String getCountry(Player player) {
+		if (geoiptools != null) {
+			try {
+				return geoiptools.getCountry(player.getAddress().getAddress()).getName();
+			} catch (NullPointerException ex) {
+				return "unknown";
+			}
+		} else {
+			return "unknown";
+		}
+	}
 
 }

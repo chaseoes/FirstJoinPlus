@@ -20,6 +20,8 @@ public class FirstJoinPlus extends JavaPlugin {
 	public final Logger log = Logger.getLogger("Minecraft");
 
 	public void onDisable() {
+		reloadConfig();
+		saveConfig();
 		log.info("[FirstJoinPlus] Version" + getDescription().getVersion() + " by chaseoes" + " has been disabled!");
 	}
 
@@ -36,7 +38,7 @@ public class FirstJoinPlus extends JavaPlugin {
 			getConfig().options().copyDefaults(true);
 			getConfig()
 					.options()
-					.header("FirstJoinPlus v1.4 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
+					.header("FirstJoinPlus v1.4.1 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
 			getConfig().options().copyHeader(true);
 			saveConfig();
 		} catch (Exception ex) {
@@ -53,8 +55,7 @@ public class FirstJoinPlus extends JavaPlugin {
 			if (cs instanceof Player) {
 				Player player = (Player) cs;
 				if (!cs.isOp()) {
-					player.sendMessage("§cSorry, " + player.getDisplayName()
-							+ "§c, you need to be an op to do that.");
+					player.sendMessage("§cSorry, " + player.getDisplayName() + "§c, you need to be an op to do that.");
 					return true;
 				}
 				if (strings.length < 1 || strings.length > 1) {
@@ -92,6 +93,7 @@ public class FirstJoinPlus extends JavaPlugin {
 					getConfig().set("spawn.z", z);
 					getConfig().set("spawn.pitch", pitch);
 					getConfig().set("spawn.yaw", yaw);
+					getConfig().set("spawn.world", player.getLocation().getWorld().getName());
 					saveConfig();
 					cs.sendMessage("§aSucessfully set the FirstJoinPlus spawnpoint!");
 					return true;
@@ -141,7 +143,7 @@ public class FirstJoinPlus extends JavaPlugin {
 		int z = getConfig().getInt("spawn.z");
 		float pitch = getConfig().getInt("spawn.pitch");
 		float yaw = getConfig().getInt("spawn.yaw");
-		player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
+		player.teleport(new Location(getServer().getWorld(getConfig().getString("spawn.world")), x, y, z, yaw, pitch));
 	}
 
 }
