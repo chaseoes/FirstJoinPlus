@@ -1,6 +1,7 @@
 package me.chaseoes.firstjoinplus;
 
 import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,7 +53,13 @@ public class FirstJoinListener implements Listener {
         if (plugin.getConfig().getBoolean("settings.showfirstjoinsmoke")) {
             for (int i = 0; i <= 25; i++) {
                 player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
-                player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, i);
+            }
+        }
+        
+        // Play a sound!
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            if (p.hasPermission("firstjoinplus.notify")) {
+                p.playSound(p.getLocation(), Sound.LEVEL_UP, 5, 10);
             }
         }
 
@@ -65,6 +72,13 @@ public class FirstJoinListener implements Listener {
         if (plugin.getConfig().getBoolean("settings.commandsonfirstjoin")) {
             for (String command : plugin.getConfig().getStringList("commands")) {
                 player.performCommand(command);
+            }
+        }
+        
+        // Run some more commands!
+        if (plugin.getConfig().getBoolean("settings.console-commandsonfirstjoin")) {
+            for (String command : plugin.getConfig().getStringList("console-commands")) {
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command);
             }
         }
 

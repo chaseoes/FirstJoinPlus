@@ -1,6 +1,6 @@
 name: FirstJoinPlus
 main: me.chaseoes.firstjoinplus.FirstJoinPlus
-version: 1.5
+version: 1.6
 dev-url: http://dev.bukkit.org/server-mods/firstjoinplus/
 description: Controls all aspects of when players join for the first time.
 author: chaseoes

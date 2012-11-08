@@ -1,6 +1,13 @@
 FirstJoinPlus v1.5
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v1.6
+Added firstjoinplus.notify permission. When a player joins for the first time, players with that permissions will hear a sound effect.
+Added console-commands section to the configuration - run console commands when a player joins for the first time!
+Added variables to the commands and console-commands section(s) so you can use %name%, %displayname%, %number%, and the other GeoIPTools variables.
+Fixed setting "none" to leave/join/kick messages not working to disable them.
+Fixed various other small things.
+
 v1.5
 Major code refactoring and cleanup.
 Added FirstJoinEvent for developers (though useless as the Bukkit API has the ability to check).

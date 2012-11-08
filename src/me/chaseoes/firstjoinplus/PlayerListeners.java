@@ -66,8 +66,9 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (!Utilities.getUtilities().onlyfirstjoin()) {
-            if (plugin.getConfig().getBoolean("settings.showleavemessage")) {
-                event.setQuitMessage(Utilities.getUtilities().format(plugin.getConfig().getString("messages.leavemessage"), event.getPlayer()));
+            String message = plugin.getConfig().getString("messages.leavemessage");
+            if (!message.equalsIgnoreCase("none")) {
+                event.setQuitMessage(Utilities.getUtilities().format(message, event.getPlayer()));
             } else {
                 event.setQuitMessage(null);
             }
@@ -78,8 +79,9 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         if (!Utilities.getUtilities().onlyfirstjoin()) {
-            if (plugin.getConfig().getBoolean("settings.showkickmessage")) {
-                event.setLeaveMessage(Utilities.getUtilities().format(plugin.getConfig().getString("messages.kickmessage"), event.getPlayer()));
+            String message = plugin.getConfig().getString("messages.kickmessage");
+            if (!message.equalsIgnoreCase("none")) {
+                event.setLeaveMessage(Utilities.getUtilities().format(message, event.getPlayer()));
             } else {
                 event.setLeaveMessage(null);
             }

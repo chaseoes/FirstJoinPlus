@@ -2,7 +2,6 @@
 settings:
     onlyfirstjoin: false
     worldname: world
-    debug: false
     updatecheck: true
     metrics: true
     itemonfirstjoin: false
@@ -12,6 +11,7 @@ settings:
     showfirstjoinsmoke: true
     numberonfirstjoin: true
     commandsonfirstjoin: false
+    console-commandsonfirstjoin: false
     xponfirstjoin: 0
     numberonjoin: false
 messages:
@@ -28,6 +28,8 @@ motd:
     - '&bWebsite! http://dev.bukkit.org/server-mods/firstjoinplus/'
 commands:
     - 'me just joined for the first time!'
+console-commands:
+    - 'say %player% just joined for the first time!'
 spawn:
     x: 1
     y: 1
