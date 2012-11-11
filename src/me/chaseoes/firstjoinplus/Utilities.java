@@ -8,12 +8,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import uk.org.whoami.geoip.GeoIPLookup;
+import uk.org.whoami.geoip.GeoIPTools;
 
 public class Utilities {
 
     private FirstJoinPlus plugin;
     static Utilities instance = new Utilities();
-    public GeoIPLookup geoiptools;
+    public GeoIPLookup geoiplookup;
 
     private Utilities() {
 
@@ -25,6 +26,10 @@ public class Utilities {
 
     public void setup(FirstJoinPlus p) {
         plugin = p;
+        Plugin geoiptools = plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
+        if (geoiptools != null) {
+            geoiplookup = ((GeoIPTools) geoiptools).getGeoIPLookup();
+        }
     }
 
     public void log(String l) {
@@ -87,17 +92,13 @@ public class Utilities {
     }
 
     public boolean geoIPInstalled() {
-        Plugin plug = plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
-        if (plug != null) {
-            return true;
-        }
-        return false;
+        return geoiplookup != null;
     }
 
     public String getCity(Player player) {
-        if (geoiptools != null) {
+        if (geoIPInstalled()) {
             try {
-                return geoiptools.getLocation(player.getAddress().getAddress()).city;
+                return geoiplookup.getLocation(player.getAddress().getAddress()).city;
             } catch (NullPointerException ex) {
                 return "unknown";
             }
@@ -106,9 +107,9 @@ public class Utilities {
     }
 
     public String getCountry(Player player) {
-        if (geoiptools != null) {
+        if (geoIPInstalled()) {
             try {
-                return geoiptools.getCountry(player.getAddress().getAddress()).getName();
+                return geoiplookup.getCountry(player.getAddress().getAddress()).getName();
             } catch (NullPointerException ex) {
                 return "unknown";
             }
