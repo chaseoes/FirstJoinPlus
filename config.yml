@@ -1,6 +1,6 @@
-## FirstJoinPlus v1.5 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
+## FirstJoinPlus v1.6.1 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
 settings:
-    onlyfirstjoin: false
+    onlyfirstjoin: true
     worldname: world
     updatecheck: true
     metrics: true
@@ -14,6 +14,7 @@ settings:
     console-commandsonfirstjoin: false
     xponfirstjoin: 0
     numberonjoin: false
+    invincibleonfirstjoin: 0
 messages:
     firstjoinmessage: '&d%name% has joined the game for the first time!'
     joinmessage: '&e%name% has joined the game.'
@@ -29,7 +30,7 @@ motd:
 commands:
     - 'me just joined for the first time!'
 console-commands:
-    - 'say %player% just joined for the first time!'
+    - 'say %name% just joined for the first time!'
 spawn:
     x: 1
     y: 1

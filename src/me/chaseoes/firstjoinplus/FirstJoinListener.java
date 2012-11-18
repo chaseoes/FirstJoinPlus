@@ -55,7 +55,7 @@ public class FirstJoinListener implements Listener {
                 player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
             }
         }
-        
+
         // Play a sound!
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (p.hasPermission("firstjoinplus.notify")) {
@@ -71,20 +71,35 @@ public class FirstJoinListener implements Listener {
         // Run some commands!
         if (plugin.getConfig().getBoolean("settings.commandsonfirstjoin")) {
             for (String command : plugin.getConfig().getStringList("commands")) {
-                player.performCommand(command);
+                String cmnd = Utilities.getUtilities().format(command, player);
+                player.performCommand(cmnd);
             }
         }
-        
+
         // Run some more commands!
         if (plugin.getConfig().getBoolean("settings.console-commandsonfirstjoin")) {
             for (String command : plugin.getConfig().getStringList("console-commands")) {
-                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command);
+                String cmnd = Utilities.getUtilities().format(command, player);
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmnd);
             }
         }
 
         // Show the number of players who have joined in total.
         if (plugin.getConfig().getBoolean("settings.numberonfirstjoin")) {
             plugin.getServer().broadcastMessage(Utilities.getUtilities().format(plugin.getConfig().getString("messages.numbermessage"), player));
+        }
+
+        // Make the player invincible for x seconds.
+        Integer invincible = plugin.getConfig().getInt("settings.invincibleonfirstjoin");
+        if (invincible != 0) {
+            Utilities.getUtilities().invincible.add(player.getName());
+            final Player p = player;
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    Utilities.getUtilities().invincible.remove(p.getName());
+                }
+            }, invincible * 20L);
         }
 
     }

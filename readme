@@ -1,6 +1,11 @@
 FirstJoinPlus v1.6
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v1.6.1
+Added "invincibleonfirstjoin" configuration option to set the amount of seconds a player is invincible for on their first join.
+Fixed GeoIPTools support not working (possibly).
+Fixed variables not working for the commands and console-commands sections.
+
 v1.6
 Added firstjoinplus.notify permission. When a player joins for the first time, players with that permissions will hear a sound effect.
 Added console-commands section to the configuration - run console commands when a player joins for the first time!

@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -33,7 +34,7 @@ public class PlayerListeners implements Listener {
     // Join Handling
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         if (!Utilities.getUtilities().onlyfirstjoin()) {
             // Variables
             StringBuilder joinmsg = new StringBuilder();
@@ -52,12 +53,16 @@ public class PlayerListeners implements Listener {
             }
 
         }
-        
+
         // Check for Updates!
         if (player.isOp()) {
             if (Utilities.getUtilities().needsUpdate()) {
-                player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
-                player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                    public void run() {
+                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
+                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
+                    }
+                }, 100L);
             }
         }
     }
@@ -84,6 +89,17 @@ public class PlayerListeners implements Listener {
                 event.setLeaveMessage(Utilities.getUtilities().format(message, event.getPlayer()));
             } else {
                 event.setLeaveMessage(null);
+            }
+        }
+    }
+
+    // Invincibility
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (Utilities.getUtilities().invincible.contains(player.getName())) {
+                event.setCancelled(true);
             }
         }
     }

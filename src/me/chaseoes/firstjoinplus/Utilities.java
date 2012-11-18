@@ -1,6 +1,7 @@
 package me.chaseoes.firstjoinplus;
 
 import java.io.File;
+import java.util.HashSet;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ public class Utilities {
     private FirstJoinPlus plugin;
     static Utilities instance = new Utilities();
     public GeoIPLookup geoiplookup;
+    public HashSet<String> invincible = new HashSet<String>();
 
     private Utilities() {
 
