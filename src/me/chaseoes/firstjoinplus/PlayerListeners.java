@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class PlayerListeners implements Listener {
 
     private final JavaPlugin plugin;
-
     public PlayerListeners(JavaPlugin plugin) {
         this.plugin = plugin;
     }
@@ -41,8 +40,9 @@ public class PlayerListeners implements Listener {
 
             // Show Join Message and Number on Join
             if (player.hasPlayedBefore()) {
-                if (plugin.getConfig().getBoolean("settings.showjoinmessage")) {
-                    joinmsg.append(Utilities.getUtilities().format(plugin.getConfig().getString("messages.joinmessage"), player));
+                String message = plugin.getConfig().getString("messages.joinmessage");
+                if (!message.equalsIgnoreCase("none")) {
+                    joinmsg.append(Utilities.getUtilities().format(message, player));
                     if (plugin.getConfig().getBoolean("settings.numberonjoin")) {
                         joinmsg.append("\n" + Utilities.getUtilities().format(plugin.getConfig().getString("messages.numbermessage"), player));
                     }
@@ -55,15 +55,13 @@ public class PlayerListeners implements Listener {
         }
 
         // Check for Updates!
-        if (player.isOp()) {
-            if (Utilities.getUtilities().needsUpdate()) {
+        if (player.isOp() && plugin.getConfig().getBoolean("settings.updatecheck") && Utilities.getUtilities().needsUpdate()) {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                     public void run() {
                         player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
                         player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
                     }
                 }, 100L);
-            }
         }
     }
 

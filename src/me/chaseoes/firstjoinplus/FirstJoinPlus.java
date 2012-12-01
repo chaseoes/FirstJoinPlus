@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FirstJoinPlus extends JavaPlugin {
 
     public final Logger log = Logger.getLogger("Minecraft");
+    public String latestVersion = null;
 
     @Override
     public void onEnable() {
@@ -23,7 +24,7 @@ public class FirstJoinPlus extends JavaPlugin {
         Utilities.getUtilities().setup(this);
 
         // Configuration
-        getConfig().options().header("FirstJoinPlus " + getDescription().getVersion() + " Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
+        getConfig().options().header("FirstJoinPlus " + getDescription().getVersion() + " Configuration -- Please see: https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
         getConfig().options().copyDefaults(true);
         getConfig().options().copyHeader(true);
         saveConfig();
@@ -36,6 +37,23 @@ public class FirstJoinPlus extends JavaPlugin {
             } catch (IOException e) {
                 // Failed to submit!
             }
+        }
+
+        // Check for updates every 30 minutes.
+        if (getConfig().getBoolean("settings.updatecheck")) {
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+                @Override
+                public void run() {
+                    UpdateChecker update = new UpdateChecker();
+                    latestVersion = update.getLatestVersion();
+                    if (Utilities.getUtilities().needsUpdate()) {
+                        for (Player player : getServer().getOnlinePlayers()) {
+                            player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
+                            player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
+                        }
+                    }
+                }
+            }, 0L, 3660L);
         }
 
     }
@@ -85,7 +103,7 @@ public class FirstJoinPlus extends JavaPlugin {
 
         if (strings[0].equalsIgnoreCase("setspawn")) {
             if (cs.hasPermission("firstjoinplus.setspawn")) {
-                    getConfig().set("settings.firstjoinspawning", true);
+                getConfig().set("settings.firstjoinspawning", true);
                 getConfig().set("spawn.x", player.getLocation().getBlockX());
                 getConfig().set("spawn.y", player.getLocation().getBlockY());
                 getConfig().set("spawn.z", player.getLocation().getBlockZ());

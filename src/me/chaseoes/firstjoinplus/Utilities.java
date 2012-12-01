@@ -57,8 +57,7 @@ public class Utilities {
     }
 
     public boolean needsUpdate() {
-        String pageurl = UpdateChecker.fetch("http://emeraldsmc.com/fjp/");
-        if (!pageurl.equalsIgnoreCase(plugin.getDescription().getVersion())) {
+        if (!plugin.latestVersion.equalsIgnoreCase(plugin.getDescription().getVersion())) {
             return true;
         }
         return false;

@@ -1,6 +1,10 @@
 FirstJoinPlus v1.6
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v1.6.2
+Fixed the "updatecheck" configuration option not being respected.
+Possible fix for join messages not being displayed.
+
 v1.6.1
 Added "invincibleonfirstjoin" configuration option to set the amount of seconds a player is invincible for on their first join.
 Fixed GeoIPTools support not working (possibly).
