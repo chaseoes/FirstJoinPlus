@@ -1,5 +1,13 @@
-FirstJoinPlus v1.6.2
+FirstJoinPlus v1.7
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.7
+Added ability to give players written books on first join through text files. The first line of the file will be the name of the book, and the second is the author (color codes accepted), use '/np' on it's own line to start a new page. Place files in the FirstJoinPlus folder.
+Added ability to name your first join items, just add another period with the name (color codes accepted). Example: 57.1.0.A diamond block!
+Added ability to change the notify sound in the configuration.
+Added 'debug' configuration option. When enabled, every join will be treated as a first join, even if it's not. Use this for testing.
+Fixed the configuration option to give items on first join being called 'itemonfirstjoin' instead of 'itemsonfirstjoin'. You'll need to fix this manually unless you reset your configuration.
+This version REQUIRES the latest CraftBukkit RB or higher (released 12/18/12): http://dl.bukkit.org/latest-rb/craftbukkit.jar
 
 v1.6.2
 Fixed the "updatecheck" configuration option not being respected.

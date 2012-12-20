@@ -24,7 +24,11 @@ public class PlayerListeners implements Listener {
         Player player = event.getPlayer();
 
         // Call the first join event.
-        if (!player.hasPlayedBefore()) {
+        Boolean b = player.hasPlayedBefore();
+        if (plugin.getConfig().getBoolean("settings.debug")) {
+            b = false;
+        }
+        if (!b) {
             plugin.getServer().getPluginManager().callEvent(new FirstJoinEvent(event));
             return;
         }

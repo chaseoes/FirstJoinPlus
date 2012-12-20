@@ -1,10 +1,18 @@
 package me.chaseoes.firstjoinplus;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.logging.Level;
+
 import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FirstJoinListener implements Listener {
@@ -50,6 +58,7 @@ public class FirstJoinListener implements Listener {
         }
 
         // Show some fancy smoke!
+        // Can't wait for a Firework API to implement the same idea!
         if (plugin.getConfig().getBoolean("settings.showfirstjoinsmoke")) {
             for (int i = 0; i <= 25; i++) {
                 player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
@@ -59,7 +68,8 @@ public class FirstJoinListener implements Listener {
         // Play a sound!
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (p.hasPermission("firstjoinplus.notify")) {
-                p.playSound(p.getLocation(), Sound.LEVEL_UP, 5, 10);
+                Sound s = Sound.valueOf(plugin.getConfig().getString("settings.notify-sound"));
+                p.playSound(p.getLocation(), s, 1, 1);
             }
         }
 
@@ -100,6 +110,53 @@ public class FirstJoinListener implements Listener {
                     Utilities.getUtilities().invincible.remove(p.getName());
                 }
             }, invincible * 20L);
+        }
+
+        // Written books!
+        if (plugin.getConfig().getBoolean("settings.writtenbooksonfirstjoin")) {
+            for (String file : plugin.getConfig().getStringList("written-books")) {
+                ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+                BookMeta bm = (BookMeta) book.getItemMeta();
+                File f = new File(plugin.getDataFolder() + "/" + file);
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(f));
+                    StringBuilder sb = new StringBuilder();
+                    String line = br.readLine();
+                    int i = 0;
+                    
+                    while (line != null) {
+                        i++;
+                        
+                        if (i != 1 && i != 2) {
+                            if (line.equalsIgnoreCase("/newpage") || line.equalsIgnoreCase("/np")) {
+                                bm.addPage(sb.toString());
+                                sb = new StringBuilder();
+                            } else {
+                                    sb.append(Utilities.getUtilities().colorize(line));
+                                    sb.append("\n");
+                            }
+                        } else {
+                            if (i == 1) {
+                                bm.setTitle(Utilities.getUtilities().colorize(line));
+                            }
+                            if (i == 2) {
+                                bm.setAuthor(Utilities.getUtilities().colorize(line));
+                            }
+                        }
+                        line = br.readLine();
+                    }
+                    
+                    br.close();
+                    bm.addPage(sb.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    plugin.getLogger().log(Level.WARNING, "Error encountered while trying to give a new player a written book! (File " + file + ")");
+                    plugin.getLogger().log(Level.WARNING, "Please check that the file exists and is readable.");
+                }
+                
+                book.setItemMeta(bm);
+                player.getInventory().addItem(book);
+            }
         }
 
     }

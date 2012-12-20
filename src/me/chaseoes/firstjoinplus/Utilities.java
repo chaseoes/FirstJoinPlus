@@ -3,9 +3,11 @@ package me.chaseoes.firstjoinplus;
 import java.io.File;
 import java.util.HashSet;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import uk.org.whoami.geoip.GeoIPLookup;
@@ -64,10 +66,7 @@ public class Utilities {
     }
 
     public String colorize(String s) {
-        if (s == null) {
-            return null;
-        }
-        return s.replaceAll("&([l-o0-9a-f])", "\u00A7$1");
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 
     public String format(String string, Player player) {
@@ -87,7 +86,12 @@ public class Utilities {
 
     public void giveFirstJoinItems(Player player) {
         for (String itemStr : plugin.getConfig().getStringList("items")) {
-            ItemStack istack = new ItemStack(Integer.parseInt(itemStr.split("\\.")[0]), Integer.parseInt(itemStr.split("\\.")[1]), (short) 0, Byte.parseByte(itemStr.split("\\.")[2]));
+            ItemStack istack = new ItemStack(Integer.parseInt(itemStr.split("\\.")[0]), Integer.parseInt(itemStr.split("\\.")[1]), (short) Integer.parseInt(itemStr.split("\\.")[2]));
+            if (itemStr.split("\\.").length > 3) {
+                ItemMeta im = istack.getItemMeta();
+                im.setDisplayName(Utilities.getUtilities().colorize(itemStr.split("\\.")[3]));
+                istack.setItemMeta(im);
+            }
             player.getInventory().addItem(istack);
         }
     }

@@ -1,10 +1,10 @@
-## FirstJoinPlus v1.6.2 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
+## FirstJoinPlus v1.7 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration ##
 settings:
     onlyfirstjoin: true
     worldname: world
     updatecheck: true
-    metrics: true
-    itemonfirstjoin: false
+    debug: false
+    itemsonfirstjoin: false
     firstjoinspawning: false
     showfirstjoinmotd: true
     showfirstjoinsmoke: true
@@ -14,6 +14,8 @@ settings:
     xponfirstjoin: 0
     numberonjoin: false
     invincibleonfirstjoin: 0
+    notify-sound: LEVEL_UP
+    writtenbooksonfirstjoin: false
 messages:
     firstjoinmessage: '&d%name% has joined the game for the first time!'
     joinmessage: '&e%name% has joined the game.'
@@ -22,10 +24,13 @@ messages:
     numbermessage: '&d%number% unique players have joined the server!'
 items:
    - 57.32.0
+   - 32.1.0.&bA named flower!
 motd:
     - '&bWelcome to our server, &6%name%&b!'
     - '&bThis message can be customized in the &6FirstJoinPlus &bconfig!'
     - '&bWebsite! http://dev.bukkit.org/server-mods/firstjoinplus/'
+written-books:
+- rules.txt
 commands:
     - 'me just joined for the first time!'
 console-commands:
