@@ -14,7 +14,8 @@ public class FirstJoinPlus extends JavaPlugin {
 
     public final Logger log = Logger.getLogger("Minecraft");
     public String latestVersion = null;
-
+    
+    @SuppressWarnings("deprecation")
     @Override
     public void onEnable() {
         // Listener Registration
@@ -32,7 +33,7 @@ public class FirstJoinPlus extends JavaPlugin {
         // Metrics
         if (getConfig().getBoolean("settings.metrics")) {
             try {
-                Metrics metrics = new Metrics(this);
+                MetricsLite metrics = new MetricsLite(this);
                 metrics.start();
             } catch (IOException e) {
                 // Failed to submit!
