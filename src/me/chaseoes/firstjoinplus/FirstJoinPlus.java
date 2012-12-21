@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class FirstJoinPlus extends JavaPlugin {
 
-    public final Logger log = Logger.getLogger("Minecraft");
+    public Logger log = null;
     public String latestVersion = null;
 
     @Override
@@ -22,6 +22,7 @@ public class FirstJoinPlus extends JavaPlugin {
         pm.registerEvents(new PlayerListeners(this), this);
         pm.registerEvents(new FirstJoinListener(this), this);
         Utilities.getUtilities().setup(this);
+        log = getLogger();
 
         // Configuration
         getConfig().options().header("FirstJoinPlus " + getDescription().getVersion() + " Configuration -- Please see: https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
@@ -39,20 +40,17 @@ public class FirstJoinPlus extends JavaPlugin {
             }
         }
 
-        // Check for updates every 30 minutes.
-        getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-            @Override 
-            public void run() {
-                UpdateChecker update = new UpdateChecker();
-                latestVersion = update.getLatestVersion();
-                if (Utilities.getUtilities().needsUpdate()) {
-                    for (Player player : getServer().getOnlinePlayers()) {
-                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
-                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
-                    }
+        // Check for updates.
+        UpdateChecker update = new UpdateChecker();
+        latestVersion = update.getLatestVersion();
+        if (Utilities.getUtilities().needsUpdate()) {
+            for (Player player : getServer().getOnlinePlayers()) {
+                if (player.hasPermission("firstjoinplus.updatecheck")) {
+                    player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
+                    player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
                 }
             }
-        }, 3660L);
+        }
 
     }
 
