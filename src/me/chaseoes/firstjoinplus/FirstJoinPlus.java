@@ -14,8 +14,7 @@ public class FirstJoinPlus extends JavaPlugin {
 
     public final Logger log = Logger.getLogger("Minecraft");
     public String latestVersion = null;
-    
-    @SuppressWarnings("deprecation")
+
     @Override
     public void onEnable() {
         // Listener Registration
@@ -41,21 +40,19 @@ public class FirstJoinPlus extends JavaPlugin {
         }
 
         // Check for updates every 30 minutes.
-        if (getConfig().getBoolean("settings.updatecheck")) {
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    UpdateChecker update = new UpdateChecker();
-                    latestVersion = update.getLatestVersion();
-                    if (Utilities.getUtilities().needsUpdate()) {
-                        for (Player player : getServer().getOnlinePlayers()) {
-                            player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
-                            player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
-                        }
+        getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
+            @Override 
+            public void run() {
+                UpdateChecker update = new UpdateChecker();
+                latestVersion = update.getLatestVersion();
+                if (Utilities.getUtilities().needsUpdate()) {
+                    for (Player player : getServer().getOnlinePlayers()) {
+                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
+                        player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
                     }
                 }
-            }, 0L, 3660L);
-        }
+            }
+        }, 3660L);
 
     }
 
