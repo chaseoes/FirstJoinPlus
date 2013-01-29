@@ -1,9 +1,14 @@
 package me.chaseoes.firstjoinplus;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
+import me.chaseoes.firstjoinplus.metrics.MetricsLite;
+import me.chaseoes.firstjoinplus.utilities.UpdateChecker;
+import me.chaseoes.firstjoinplus.utilities.Utilities;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,17 +17,41 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class FirstJoinPlus extends JavaPlugin {
 
-    public Logger log = null;
-    public String latestVersion = null;
+    private static FirstJoinPlus instance;
+    public UpdateChecker update;
+    String smile = "Girls with the prettiest smiles, have the saddest stories.";
+
+    public static FirstJoinPlus getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
         // Listener Registration
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerListeners(this), this);
+        pm.registerEvents(new PlayerListeners(), this);
         pm.registerEvents(new FirstJoinListener(this), this);
         Utilities.getUtilities().setup(this);
-        log = getLogger();
+        instance = this;
+        update = new UpdateChecker();
+        update.startTask();
+        
+        if (getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
+            saveResource("rules.txt", false);
+        }
+
+        // Compatibility
+        if (getConfig().getString("settings.worldname") != null) {
+            File configuration = new File(getDataFolder() + "/config.yml");
+            configuration.setWritable(true);
+            configuration.renameTo(new File(getDataFolder() + "/old-config.yml"));
+            String[] sections = getConfig().getConfigurationSection("").getKeys(false).toArray(new String[0]);
+            for (String s : sections) {
+                getConfig().set(s, null);
+            }
+            saveConfig();
+            getLogger().log(Level.SEVERE, "Your configuration was found to be outdated, so we generated a new one for you.");
+        }
 
         // Configuration
         getConfig().options().header("FirstJoinPlus " + getDescription().getVersion() + " Configuration -- Please see: https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #");
@@ -31,41 +60,33 @@ public class FirstJoinPlus extends JavaPlugin {
         saveConfig();
 
         // Metrics
-        if (getConfig().getBoolean("settings.metrics")) {
-            try {
-                MetricsLite metrics = new MetricsLite(this);
-                metrics.start();
-            } catch (IOException e) {
-                // Failed to submit!
-            }
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit! :(
         }
-
-        // Check for updates.
-        UpdateChecker update = new UpdateChecker();
-        latestVersion = update.getLatestVersion();
-        if (Utilities.getUtilities().needsUpdate()) {
-            for (Player player : getServer().getOnlinePlayers()) {
-                if (player.hasPermission("firstjoinplus.updatecheck")) {
-                    player.sendMessage("§e[§lFirstJoinPlus§r§e] §aA new version is available!");
-                    player.sendMessage("§e[§lFirstJoinPlus§r§e] §aDownload it at: §ohttp://dev.bukkit.org/server-mods/firstjoinplus/");
-                }
-            }
-        }
-
     }
 
     @Override
     public void onDisable() {
+        getServer().getScheduler().cancelTasks(this);
         reloadConfig();
         saveConfig();
-        getServer().getScheduler().cancelTasks(this);
     }
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
+        String prefix = ChatColor.DARK_GREEN + "[FirstJoinPlus] ";
+        String noPermission = prefix + ChatColor.DARK_RED + "You don't have permission.";
 
-        if (strings.length < 1 || strings.length > 1) {
-            cs.sendMessage("§e[§lFirstJoinPlus§r§e] §4Usage: /firstjoinplus <reload|setspawn|spawn|items|motd>");
+        if (strings.length == 0) {
+            cs.sendMessage(ChatColor.GOLD + "FirstJoinPlus " + ChatColor.GRAY + "version " + ChatColor.GOLD + getDescription().getVersion() + ChatColor.GRAY + " by chaseoes.");
+            return true;
+        }
+
+        if (strings.length != 1) {
+            cs.sendMessage(prefix + ChatColor.DARK_RED + "Usage: /firstjoinplus <reload|setspawn|spawn|items|motd>");
             return true;
         }
 
@@ -73,33 +94,36 @@ public class FirstJoinPlus extends JavaPlugin {
             if (cs.hasPermission("firstjoinplus.reload")) {
                 reloadConfig();
                 saveConfig();
-                cs.sendMessage("§e[§lFirstJoinPlus§r§e] §aSuccessfully reloaded the configuration!");
+                if (getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
+                    saveResource("rules.txt", false);
+                }
+                cs.sendMessage(prefix + ChatColor.GREEN + "Successfully reloaded the configuration.");
             } else {
-                noPermission(cs);
+                cs.sendMessage(noPermission);
             }
             return true;
         }
 
         if (!(cs instanceof Player)) {
-            cs.sendMessage("§e[§lFirstJoinPlus§r§e] §cYou must be a player to do that.");
+            cs.sendMessage("You must be a player to do that.");
             return true;
         }
-
+        
         Player player = (Player) cs;
+        
         if (strings[0].equalsIgnoreCase("motd")) {
             if (cs.hasPermission("firstjoinplus.motd")) {
-                List<String> motd = getConfig().getStringList("motd");
-                for (String motdStr : motd) {
-                    cs.sendMessage(Utilities.getUtilities().format(motdStr, player));
+                for (String motdStr : getConfig().getStringList("on-first-join.send-motd.messages")) {
+                    cs.sendMessage(Utilities.getUtilities().formatVariables(motdStr, player));
                 }
             } else {
-                noPermission(cs);
+                cs.sendMessage(noPermission);
             }
         }
 
         if (strings[0].equalsIgnoreCase("setspawn")) {
             if (cs.hasPermission("firstjoinplus.setspawn")) {
-                getConfig().set("settings.firstjoinspawning", true);
+                getConfig().set("on-first-join.teleport", true);
                 getConfig().set("spawn.x", player.getLocation().getBlockX());
                 getConfig().set("spawn.y", player.getLocation().getBlockY());
                 getConfig().set("spawn.z", player.getLocation().getBlockZ());
@@ -108,41 +132,38 @@ public class FirstJoinPlus extends JavaPlugin {
                 getConfig().set("spawn.world", player.getLocation().getWorld().getName());
                 saveConfig();
                 reloadConfig();
-                cs.sendMessage("§e[§lFirstJoinPlus§r§e] §aSuccessfully set the first join spawnpoint!");
-                cs.sendMessage("§e[§lFirstJoinPlus§r§e] §aTest it by typing: §o/firstjoinplus spawn");
+                cs.sendMessage(prefix + ChatColor.GREEN + "Successfully set the first join spawn location.");
             } else {
-                noPermission(cs);
+                cs.sendMessage(noPermission);
             }
         }
 
         if (strings[0].equalsIgnoreCase("items")) {
             if (cs.hasPermission("firstjoinplus.items")) {
-                getConfig().set("settings.itemonfirstjoin", true);
                 Utilities.getUtilities().giveFirstJoinItems(player);
-                cs.sendMessage("§e[§lFirstJoinPlus§r§e] §aSuccessfully gave all items defined in the configuration.");
+                if (getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
+                    Utilities.getUtilities().giveWrittenBooks(player);
+                }
+                cs.sendMessage(prefix + ChatColor.GREEN + "Successfully gave all defined items.");
             } else {
-                noPermission(cs);
+                cs.sendMessage(noPermission);
             }
         }
 
         if (strings[0].equalsIgnoreCase("spawn")) {
             if (cs.hasPermission("firstjoinplus.spawn")) {
-                if (!getConfig().getBoolean("settings.firstjoinspawning")) {
-                    cs.sendMessage("§e[§lFirstJoinPlus§r§e] §cYou haven't set a first join spawnpoint yet.");
+                if (!getConfig().getBoolean("on-first-join.teleport")) {
+                    cs.sendMessage(prefix + ChatColor.DARK_RED + "A first join spawn location hasn't been set.");
                     return true;
                 }
 
                 Utilities.getUtilities().teleportToFirstSpawn(player);
-                cs.sendMessage("§e[§lFirstJoinPlus§r§e] §aSuccessfully teleported to the first join spawnpoint.");
+                cs.sendMessage(prefix + ChatColor.GREEN + "Successfully teleported to the first join spawn location.");
             } else {
-                noPermission(cs);
+                cs.sendMessage(noPermission);
             }
         }
         return true;
-    }
-
-    public void noPermission(CommandSender cs) {
-        cs.sendMessage("§e[§lFirstJoinPlus§r§e] §cYou don't have permission for that.");
     }
 
 }

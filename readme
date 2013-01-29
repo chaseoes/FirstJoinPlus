@@ -1,5 +1,17 @@
-FirstJoinPlus v1.7
+FirstJoinPlus v1.8
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.8
+Completely re-wrote the configuration. When updating, your old one will be deleted and replaced with the new. You will need to re-configure the plugin.
+Fixed issue with items not being given on first join.
+Fixed update checking being horrible for the last time. Sorry! (It's ironic, I know.)
+Removed ability to customize join/quit/kick messages. If anyone actually used this let me know and I can make a separate plugin that does this.
+Removed support for GeoIPTools (it may return in the future if you bug me about it).
+All other known bugs/issues have been fixed.
+
+v1.7.1
+Fixed the '/fjp items' command not giving the defined written books.
+Fixed update checking completely failing.
 
 v1.7
 Added ability to give players written books on first join through text files. The first line of the file will be the name of the book, and the second is the author (color codes accepted), use '/np' on it's own line to start a new page. Place files in the FirstJoinPlus folder.

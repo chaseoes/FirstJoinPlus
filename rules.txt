@@ -1,0 +1,10 @@
+&bOur Rules
+Random Author
+This is the first page!
+
+&lPlease read our rules!
+/newpage
+This is page 2 of the book!
+/newpage
+Wow, page 3 of the book!
+Have you tried &acolor codes?
