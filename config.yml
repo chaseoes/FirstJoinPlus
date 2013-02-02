@@ -25,6 +25,7 @@ on-first-join:
     - rules.txt
   send-motd:
     enabled: false
+    delay: 20
     messages:
     - '&2Welcome to our server, %player-name! Customize this message in the FirstJoinPlus configuration:'
     - '&6http://dev.bukkit.org/server-mods/firstjoinplus/'

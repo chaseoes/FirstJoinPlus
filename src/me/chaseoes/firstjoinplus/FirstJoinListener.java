@@ -18,10 +18,10 @@ public class FirstJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onFirstJoin(FirstJoinEvent event) {
+    public void onFirstJoin(final FirstJoinEvent event) {
 
         // Variables!
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         // Show the first join message.
         if (plugin.getConfig().getBoolean("on-first-join.show-first-join-message")) {
@@ -35,9 +35,13 @@ public class FirstJoinListener implements Listener {
 
         // Show the first join MOTD.
         if (plugin.getConfig().getBoolean("on-first-join.send-motd.enabled")) {
-            for (String motdStr : plugin.getConfig().getStringList("on-first-join.send-motd.messages")) {
-                player.sendMessage(Utilities.getUtilities().formatVariables(motdStr, player));
-            }
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                public void run() {
+                    for (String motdStr : plugin.getConfig().getStringList("on-first-join.send-motd.messages")) {
+                        player.sendMessage(Utilities.getUtilities().formatVariables(motdStr, player));
+                    }
+                }
+            }, plugin.getConfig().getLong("on-first'join.send-motd.delay"));
         }
 
         // Teleport the player to the first join spawnpoint.
