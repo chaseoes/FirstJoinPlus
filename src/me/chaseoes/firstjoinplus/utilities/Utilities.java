@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import me.chaseoes.firstjoinplus.FirstJoinPlus;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,13 +42,13 @@ public class Utilities {
         return new File(plugin.getServer().getWorlds().get(0).getName() + "/players/").list().length;
     }
     
-    public void teleportToFirstSpawn(Player player) {
+    public Location getFirstJoinLocation() {
         int x = plugin.getConfig().getInt("spawn.x");
         int y = plugin.getConfig().getInt("spawn.y");
         int z = plugin.getConfig().getInt("spawn.z");
         float pitch = plugin.getConfig().getInt("spawn.pitch");
         float yaw = plugin.getConfig().getInt("spawn.yaw");
-        player.teleport(new Location(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")), x + 0.5, y, z + 0.5, yaw, pitch));
+        return new Location(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")), x + 0.5, y, z + 0.5, yaw, pitch);
     }
 
     public void giveFirstJoinItems(Player player) {
@@ -116,6 +117,12 @@ public class Utilities {
             
             book.setItemMeta(bm);
             player.getInventory().addItem(book);
+        }
+    }
+    
+    public void playSmoke(Location loc) {
+        for (int i = 0; i <= 25; i++) {
+            loc.getWorld().playEffect(loc, Effect.SMOKE, i);
         }
     }
     

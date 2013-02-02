@@ -157,7 +157,7 @@ public class FirstJoinPlus extends JavaPlugin {
                     return true;
                 }
 
-                Utilities.getUtilities().teleportToFirstSpawn(player);
+                player.teleport(Utilities.getUtilities().getFirstJoinLocation());
                 cs.sendMessage(prefix + ChatColor.GREEN + "Successfully teleported to the first join spawn location.");
             } else {
                 cs.sendMessage(noPermission);

@@ -1,5 +1,8 @@
 package me.chaseoes.firstjoinplus;
 
+import me.chaseoes.firstjoinplus.utilities.Utilities;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -28,5 +31,12 @@ public class FirstJoinEvent extends Event {
 
     public void setFirstJoinMessage(String message) {
         e.setJoinMessage(message);
+    }
+    
+    public Location getLocation() {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.teleport")) {
+            return Utilities.getUtilities().getFirstJoinLocation();
+        }
+        return e.getPlayer().getLocation();
     }
 }

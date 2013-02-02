@@ -2,7 +2,7 @@ package me.chaseoes.firstjoinplus;
 
 import me.chaseoes.firstjoinplus.utilities.Utilities;
 
-import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,6 +36,7 @@ public class FirstJoinListener implements Listener {
         // Show the first join MOTD.
         if (plugin.getConfig().getBoolean("on-first-join.send-motd.enabled")) {
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                @Override
                 public void run() {
                     for (String motdStr : plugin.getConfig().getStringList("on-first-join.send-motd.messages")) {
                         player.sendMessage(Utilities.getUtilities().formatVariables(motdStr, player));
@@ -46,30 +47,31 @@ public class FirstJoinListener implements Listener {
 
         // Teleport the player to the first join spawnpoint.
         if (plugin.getConfig().getBoolean("on-first-join.teleport")) {
-            final Player fp = event.getPlayer();
+            final Location loc = event.getLocation();
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                 @Override
                 public void run() {
-                    Utilities.getUtilities().teleportToFirstSpawn(fp);
+                    player.teleport(loc);
+                    if (plugin.getConfig().getBoolean("on-first-join.show-smoke")) {
+                        Utilities.getUtilities().playSmoke(loc);
+                    }
                 }
             }, plugin.getConfig().getLong("settings.teleport-delay"));
         }
 
         // Show some fancy smoke!
-        if (plugin.getConfig().getBoolean("on-first-join.show-smoke")) {
-            for (int i = 0; i <= 25; i++) {
-                player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
-            }
+        if (!plugin.getConfig().getBoolean("on-first-join.teleport")) {
+            Utilities.getUtilities().playSmoke(event.getLocation());
         }
 
         // Play a sound!
         if (plugin.getConfig().getBoolean("on-first-join.play-notify-sound")) {
-        for (Player p : plugin.getServer().getOnlinePlayers()) {
-            if (p.hasPermission("firstjoinplus.notify")) {
-                Sound s = Sound.valueOf(plugin.getConfig().getString("settings.notify-sound"));
-                p.playSound(p.getLocation(), s, 1, 1);
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                if (p.hasPermission("firstjoinplus.notify")) {
+                    Sound s = Sound.valueOf(plugin.getConfig().getString("settings.notify-sound"));
+                    p.playSound(p.getLocation(), s, 1, 1);
+                }
             }
-        }
         }
 
         // Give some XP!
