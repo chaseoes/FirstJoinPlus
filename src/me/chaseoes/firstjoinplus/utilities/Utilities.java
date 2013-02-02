@@ -130,6 +130,10 @@ public class Utilities {
         return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + ""));
     }
     
+    public String formatVariables(String string, Player player, String reason) {
+        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason));
+    }
+    
     public boolean isNumber(String s) {
         try {
             Integer.parseInt(s);

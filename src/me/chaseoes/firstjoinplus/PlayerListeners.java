@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListeners implements Listener {
 
@@ -47,6 +49,42 @@ public class PlayerListeners implements Listener {
             Player player = (Player) event.getEntity();
             if (Utilities.getUtilities().invincible.contains(player.getName())) {
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.join-message.enabled") && !event.getPlayer().hasPlayedBefore()) {
+            String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.join-message.message");
+            if (!message.equalsIgnoreCase("none")) {
+                event.setJoinMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
+            } else {
+                event.setJoinMessage(null);
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.quit-message.enabled")) {
+            String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.quit-message.message");
+            if (!message.equalsIgnoreCase("none")) {
+                event.setQuitMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
+            } else {
+                event.setQuitMessage(null);
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onKick(PlayerKickEvent event) {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.kick-message.enabled")) {
+            String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.kick-message.message");
+            if (!message.equalsIgnoreCase("none")) {
+                event.setLeaveMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer(), event.getReason()));
+            } else {
+                event.setLeaveMessage(null);
             }
         }
     }

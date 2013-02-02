@@ -37,3 +37,13 @@ on-first-join:
     enabled: false
     commands-to-run:
     - promote %player-name
+other-messages:
+  join-message:
+    enabled: false
+    message: '&e%player-name joined the game.'
+  quit-message:
+    enabled: false
+    message: '&e%player-name left the game.'
+  kick-message:
+    enabled: false
+    message: '&e%player-name was kicked from the game for %reason.'
