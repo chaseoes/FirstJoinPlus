@@ -46,4 +46,4 @@ other-messages:
     message: '&e%player-name left the game.'
   kick-message:
     enabled: false
-    message: '&e%player-name was kicked from the game for %reason.'
+    message: '%none'

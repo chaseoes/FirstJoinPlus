@@ -1,5 +1,12 @@
-FirstJoinPlus v1.8
+FirstJoinPlus v1.8.1
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.8.1
+Added (once again) join, quit, and kick messages with ability to completely hide them using the %none variable.
+Added GeoIPTools support (again) using the %country and %city variables.
+Added the ability to specify a delay for the MOTD (in ticks).
+Added firework launching functionality on first join.
+Fixed issues with certain effects being played in the wrong location.
 
 v1.8
 Completely re-wrote the configuration. When updating, your old one will be deleted and replaced with the new. You will need to re-configure the plugin.

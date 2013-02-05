@@ -2,9 +2,10 @@ name: FirstJoinPlus
 main: me.chaseoes.firstjoinplus.FirstJoinPlus
 description: Control all aspects of new players joining for the first time.
 author: chaseoes
-version: 1.8
+version: 1.8.1
 dev-url: http://dev.bukkit.org/server-mods/firstjoinplus/
 website: http://dev.bukkit.org/server-mods/firstjoinplus/
+softdepend: [GeoIPTools]
 commands:
   firstjoinplus:
     description: FirstJoinPlus command(s).
@@ -23,5 +24,5 @@ permissions:
     description: Permission to use the /firstjoinplus spawn command.
   firstjoinplus.notify:
     description: Players with this permission will hear a sound when a new player joins.
-  firstjoinplus.update-notify:
+  firstjoinplus.notify-update:
     description: Players with this permission will be notified about updates.

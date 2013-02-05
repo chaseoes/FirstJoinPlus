@@ -55,9 +55,9 @@ public class PlayerListeners implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.join-message.enabled") && !event.getPlayer().hasPlayedBefore()) {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.join-message.enabled") && event.getPlayer().hasPlayedBefore()) {
             String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.join-message.message");
-            if (!message.equalsIgnoreCase("none")) {
+            if (!message.equalsIgnoreCase("%none")) {
                 event.setJoinMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
             } else {
                 event.setJoinMessage(null);
@@ -69,7 +69,7 @@ public class PlayerListeners implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.quit-message.enabled")) {
             String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.quit-message.message");
-            if (!message.equalsIgnoreCase("none")) {
+            if (!message.equalsIgnoreCase("%none")) {
                 event.setQuitMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
             } else {
                 event.setQuitMessage(null);
@@ -81,7 +81,7 @@ public class PlayerListeners implements Listener {
     public void onKick(PlayerKickEvent event) {
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.kick-message.enabled")) {
             String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.kick-message.message");
-            if (!message.equalsIgnoreCase("none")) {
+            if (!message.equalsIgnoreCase("%none")) {
                 event.setLeaveMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer(), event.getReason()));
             } else {
                 event.setLeaveMessage(null);

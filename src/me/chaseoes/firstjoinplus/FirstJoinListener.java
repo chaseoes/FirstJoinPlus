@@ -55,6 +55,10 @@ public class FirstJoinListener implements Listener {
                     if (plugin.getConfig().getBoolean("on-first-join.show-smoke")) {
                         Utilities.getUtilities().playSmoke(loc);
                     }
+                    
+                    if (plugin.getConfig().getBoolean("on-first-join.launch-firework")) {
+                        Utilities.getUtilities().playFirework(event.getLocation());
+                    }
                 }
             }, plugin.getConfig().getLong("settings.teleport-delay"));
         }
@@ -62,6 +66,11 @@ public class FirstJoinListener implements Listener {
         // Show some fancy smoke!
         if (!plugin.getConfig().getBoolean("on-first-join.teleport")) {
             Utilities.getUtilities().playSmoke(event.getLocation());
+        }
+        
+        // Launch a firework!
+        if (plugin.getConfig().getBoolean("on-first-join.launch-firework") && !plugin.getConfig().getBoolean("on-first-join.teleport")) {
+            Utilities.getUtilities().playFirework(event.getLocation());
         }
 
         // Play a sound!

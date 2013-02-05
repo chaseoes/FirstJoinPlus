@@ -12,8 +12,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import uk.org.whoami.geoip.GeoIPLookup;
+import uk.org.whoami.geoip.GeoIPTools;
 
 public class FirstJoinPlus extends JavaPlugin {
 
@@ -164,6 +168,14 @@ public class FirstJoinPlus extends JavaPlugin {
             }
         }
         return true;
+    }
+    
+    public GeoIPLookup getGeoIPLookup() {
+        Plugin pl = getServer().getPluginManager().getPlugin("GeoIPTools");
+        if(pl != null) {
+            return ((GeoIPTools) pl).getGeoIPLookup();
+        }
+        return null;
     }
 
 }
