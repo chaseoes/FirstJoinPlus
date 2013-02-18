@@ -1,5 +1,10 @@
-FirstJoinPlus v1.8.1
+FirstJoinPlus v1.8.2
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.8.2
+Added ability to give potion effects on first join. Find a list of possible effects here: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffectType.html
+Added ability to start a new line in all messages through the %new-line variable.
+Fixed the invincibility on first join ability not working.
 
 v1.8.1
 Added (once again) join, quit, and kick messages with ability to completely hide them using the %none variable.
