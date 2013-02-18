@@ -37,6 +37,10 @@ on-first-join:
     enabled: false
     commands-to-run:
     - promote %player-name
+  apply-potion-effects:
+    enabled: false
+    effects:
+    - SPEED:1:15
 other-messages:
   join-message:
     enabled: false

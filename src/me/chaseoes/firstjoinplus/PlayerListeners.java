@@ -20,6 +20,9 @@ public class PlayerListeners implements Listener {
         Boolean b = player.hasPlayedBefore();
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("settings.debug")) {
             b = false;
+            player.setLevel(0);
+            player.setHealth(20);
+            player.setFoodLevel(20);
         }
 
         // Call the first join event.

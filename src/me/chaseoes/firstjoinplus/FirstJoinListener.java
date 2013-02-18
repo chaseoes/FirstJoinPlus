@@ -1,5 +1,8 @@
 package me.chaseoes.firstjoinplus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.Location;
@@ -8,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class FirstJoinListener implements Listener {
 
@@ -105,7 +110,7 @@ public class FirstJoinListener implements Listener {
         }
 
         // Make the player invincible for x seconds.
-        Integer invincible = plugin.getConfig().getInt("set-invincible");
+        Integer invincible = plugin.getConfig().getInt("on-first-join.set-invincible");
         if (invincible != 0) {
             Utilities.getUtilities().invincible.add(player.getName());
             final Player p = player;
@@ -120,6 +125,16 @@ public class FirstJoinListener implements Listener {
         // Written books!
         if (plugin.getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
             Utilities.getUtilities().giveWrittenBooks(player);
+        }
+        
+        // Apply potion effects!
+        if (plugin.getConfig().getBoolean("on-first-join.apply-potion-effects.enabled")) {
+            List<PotionEffect> effects = new ArrayList<PotionEffect>();
+            for (String s : plugin.getConfig().getStringList("on-first-join.apply-potion-effects.effects")) {
+                String[] effect = s.split("\\:");
+                effects.add(new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()), Integer.parseInt(effect[2]) * 20, (Integer.parseInt(effect[1])) - 1));
+            }
+            player.addPotionEffects(effects);
         }
 
     }
