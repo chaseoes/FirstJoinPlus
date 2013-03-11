@@ -15,12 +15,14 @@ on-first-join:
   set-invincible: 0
   give-items:
     enabled: true
+    delay: 0
     items:
     - WOOD_PICKAXE
     - BREAD:5
     - WOOL:10:6
   give-written-books:
     enabled: false
+    delay: 0
     book-files:
     - rules.txt
   send-motd:

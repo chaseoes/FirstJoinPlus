@@ -1,5 +1,9 @@
-FirstJoinPlus v1.8.2
+FirstJoinPlus v1.8.3
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v1.8.3
+Added ability to delay giving items and written books (fixes certain plugin conflicts).
+Fixed the %new-line variable not working properly.
 
 v1.8.2
 Added ability to give potion effects on first join. Find a list of possible effects here: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffectType.html
