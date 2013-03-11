@@ -152,11 +152,11 @@ public class Utilities {
     }
 
     public String formatVariables(String string, Player player) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "%new-line"));
+        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "\n"));
     }
 
     public String formatVariables(String string, Player player, String reason) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason).replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "%new-line"));
+        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason).replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "\n"));
     }
 
     public boolean isNumber(String s) {
