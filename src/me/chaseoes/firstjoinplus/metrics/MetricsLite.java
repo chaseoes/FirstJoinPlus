@@ -26,7 +26,7 @@
 * either expressed or implied, of anybody else.
 */
 
-package main.java.me.chaseoes.firstjoinplus.metrics;
+package me.chaseoes.firstjoinplus.metrics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;

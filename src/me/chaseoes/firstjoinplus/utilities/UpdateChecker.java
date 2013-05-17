@@ -1,11 +1,11 @@
-package main.java.me.chaseoes.firstjoinplus.utilities;
+package me.chaseoes.firstjoinplus.utilities;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-import main.java.me.chaseoes.firstjoinplus.FirstJoinPlus;
+import me.chaseoes.firstjoinplus.FirstJoinPlus;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

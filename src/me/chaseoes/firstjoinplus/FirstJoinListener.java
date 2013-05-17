@@ -1,9 +1,9 @@
-package main.java.me.chaseoes.firstjoinplus;
+package me.chaseoes.firstjoinplus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.me.chaseoes.firstjoinplus.utilities.Utilities;
+import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -60,7 +60,7 @@ public class FirstJoinListener implements Listener {
                     if (plugin.getConfig().getBoolean("on-first-join.show-smoke")) {
                         Utilities.getUtilities().playSmoke(loc);
                     }
-
+                    
                     if (plugin.getConfig().getBoolean("on-first-join.launch-firework")) {
                         Utilities.getUtilities().playFirework(event.getLocation());
                     }
@@ -72,7 +72,7 @@ public class FirstJoinListener implements Listener {
         if (!plugin.getConfig().getBoolean("on-first-join.teleport")) {
             Utilities.getUtilities().playSmoke(event.getLocation());
         }
-
+        
         // Launch a firework!
         if (plugin.getConfig().getBoolean("on-first-join.launch-firework") && !plugin.getConfig().getBoolean("on-first-join.teleport")) {
             Utilities.getUtilities().playFirework(event.getLocation());
@@ -126,13 +126,13 @@ public class FirstJoinListener implements Listener {
         if (plugin.getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
             Utilities.getUtilities().giveWrittenBooks(player);
         }
-
+        
         // Apply potion effects!
         if (plugin.getConfig().getBoolean("on-first-join.apply-potion-effects.enabled")) {
             List<PotionEffect> effects = new ArrayList<PotionEffect>();
             for (String s : plugin.getConfig().getStringList("on-first-join.apply-potion-effects.effects")) {
                 String[] effect = s.split("\\:");
-                effects.add(new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()), Integer.parseInt(effect[2]) * 20, Integer.parseInt(effect[1]) - 1));
+                effects.add(new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()), Integer.parseInt(effect[2]) * 20, (Integer.parseInt(effect[1])) - 1));
             }
             player.addPotionEffects(effects);
         }
