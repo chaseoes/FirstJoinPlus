@@ -1,4 +1,4 @@
-package me.chaseoes.firstjoinplus.utilities;
+package main.java.me.chaseoes.firstjoinplus.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.HashSet;
 import java.util.logging.Level;
 
-import me.chaseoes.firstjoinplus.FirstJoinPlus;
+import main.java.me.chaseoes.firstjoinplus.FirstJoinPlus;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;

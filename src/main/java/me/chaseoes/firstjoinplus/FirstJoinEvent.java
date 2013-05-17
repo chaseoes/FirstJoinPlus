@@ -1,6 +1,6 @@
-package me.chaseoes.firstjoinplus;
+package main.java.me.chaseoes.firstjoinplus;
 
-import me.chaseoes.firstjoinplus.utilities.Utilities;
+import main.java.me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
