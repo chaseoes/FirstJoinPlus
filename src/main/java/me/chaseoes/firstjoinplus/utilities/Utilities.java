@@ -45,7 +45,7 @@ public class Utilities {
     }
 
     public int getUniquePlayerCount() {
-        return new File(plugin.getServer().getWorlds().get(0).getName() + "/players/").list().length;
+        return new File(plugin.getServer().getWorldContainer(),plugin.getServer().getWorlds().get(0).getName() + "/players/").list().length;
     }
 
     public Location getFirstJoinLocation() {
