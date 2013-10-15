@@ -31,7 +31,6 @@ public class FirstJoinPlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Listener Registration
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerListeners(), this);
         pm.registerEvents(new FirstJoinListener(this), this);
