@@ -33,20 +33,6 @@ public class PlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        // Check for Updates!
-        final Player player = event.getPlayer();
-        if (player.hasPermission("firstjoinplus.notify-update") && FirstJoinPlus.getInstance().update.needsUpdate()) {
-            FirstJoinPlus.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(FirstJoinPlus.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    FirstJoinPlus.getInstance().update.nagPlayer(player);
-                }
-            }, 100L);
-        }
-    }
-
-    @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();

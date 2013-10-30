@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import me.chaseoes.firstjoinplus.metrics.MetricsLite;
-import me.chaseoes.firstjoinplus.utilities.UpdateChecker;
+import me.chaseoes.firstjoinplus.utilities.Updater;
 import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.ChatColor;
@@ -22,7 +22,7 @@ import uk.org.whoami.geoip.GeoIPTools;
 public class FirstJoinPlus extends JavaPlugin {
 
     private static FirstJoinPlus instance;
-    public UpdateChecker update;
+    public Updater updater;
     String smile = "Girls with the prettiest smiles, have the saddest stories.";
 
     public static FirstJoinPlus getInstance() {
@@ -36,11 +36,14 @@ public class FirstJoinPlus extends JavaPlugin {
         pm.registerEvents(new FirstJoinListener(this), this);
         Utilities.getUtilities().setup(this);
         instance = this;
-        update = new UpdateChecker();
-        update.startTask();
-        
+
         if (getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
             saveResource("rules.txt", false);
+        }
+
+        // Updater
+        if (getConfig().getBoolean("settings.allow-automatic-updating")) {
+            updater = new Updater(this, 37766, getFile(), Updater.UpdateType.DEFAULT, true);
         }
 
         // Compatibility
@@ -111,9 +114,9 @@ public class FirstJoinPlus extends JavaPlugin {
             cs.sendMessage("You must be a player to do that.");
             return true;
         }
-        
+
         Player player = (Player) cs;
-        
+
         if (strings[0].equalsIgnoreCase("motd")) {
             if (cs.hasPermission("firstjoinplus.motd")) {
                 for (String motdStr : getConfig().getStringList("on-first-join.send-motd.messages")) {
@@ -168,7 +171,7 @@ public class FirstJoinPlus extends JavaPlugin {
         }
         return true;
     }
-    
+
     public GeoIPLookup getGeoIPLookup() {
         Plugin pl = getServer().getPluginManager().getPlugin("GeoIPTools");
         if(pl != null) {
