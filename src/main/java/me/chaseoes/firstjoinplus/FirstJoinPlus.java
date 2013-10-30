@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import me.chaseoes.firstjoinplus.metrics.MetricsLite;
 import me.chaseoes.firstjoinplus.utilities.Metrics;
 import me.chaseoes.firstjoinplus.utilities.Updater;
 import me.chaseoes.firstjoinplus.utilities.Utilities;
