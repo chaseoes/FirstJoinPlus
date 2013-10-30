@@ -47,7 +47,7 @@ public class FirstJoinPlus extends JavaPlugin {
         }
 
         // Compatibility
-        if (getConfig().getString("settings.worldname") != null) {
+        if (getConfig().getString("settings.teleport-delay") != null) {
             File configuration = new File(getDataFolder() + "/config.yml");
             configuration.setWritable(true);
             configuration.renameTo(new File(getDataFolder() + "/old-config.yml"));
@@ -56,7 +56,7 @@ public class FirstJoinPlus extends JavaPlugin {
                 getConfig().set(s, null);
             }
             saveConfig();
-            getLogger().log(Level.SEVERE, "Your configuration was found to be outdated, so we generated a new one for you.");
+            getLogger().log(Level.SEVERE, "Your configuration was outdated, so we attempted to generate a new one for you.");
         }
 
         // Configuration
