@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import me.chaseoes.firstjoinplus.metrics.MetricsLite;
+import me.chaseoes.firstjoinplus.utilities.Metrics;
 import me.chaseoes.firstjoinplus.utilities.Updater;
 import me.chaseoes.firstjoinplus.utilities.Utilities;
 
@@ -67,10 +68,10 @@ public class FirstJoinPlus extends JavaPlugin {
 
         // Metrics
         try {
-            MetricsLite metrics = new MetricsLite(this);
+            Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
-            // Failed to submit! :(
+            // Failed to submit!
         }
     }
 
