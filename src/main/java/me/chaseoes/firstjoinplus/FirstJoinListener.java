@@ -35,7 +35,7 @@ public class FirstJoinListener implements Listener {
 
         // Give a player an item on their first join.
         if (plugin.getConfig().getBoolean("on-first-join.give-items.enabled")) {
-            Utilities.getUtilities().giveFirstJoinItems(player);
+            // Utilities.getUtilities().giveFirstJoinItems(player);
         }
 
         // Show the first join MOTD.

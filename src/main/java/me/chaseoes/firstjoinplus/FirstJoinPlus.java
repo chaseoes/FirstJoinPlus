@@ -146,7 +146,7 @@ public class FirstJoinPlus extends JavaPlugin {
 
         if (strings[0].equalsIgnoreCase("items")) {
             if (cs.hasPermission("firstjoinplus.items")) {
-                Utilities.getUtilities().giveFirstJoinItems(player);
+                // Utilities.getUtilities().giveFirstJoinItems(player);
                 if (getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
                     Utilities.getUtilities().giveWrittenBooks(player);
                 }

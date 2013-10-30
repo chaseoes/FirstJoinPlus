@@ -3,7 +3,9 @@ package me.chaseoes.firstjoinplus.utilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Level;
 
 import me.chaseoes.firstjoinplus.FirstJoinPlus;
@@ -56,33 +58,33 @@ public class Utilities {
         float yaw = plugin.getConfig().getInt("spawn.yaw");
         return new Location(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")), x + 0.5, y, z + 0.5, yaw, pitch);
     }
-
-    public void giveFirstJoinItems(final Player player) {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                for (String itemStr : plugin.getConfig().getStringList("on-first-join.give-items.items")) {
-                    ItemStack i;
-                    String[] itemValues = itemStr.split("\\:");
-
-                    if (isNumber(itemValues[0])) {
-                        i = new ItemStack(Material.getMaterial(Integer.parseInt(itemValues[0])));
-                    } else {
-                        i = new ItemStack(Material.getMaterial(itemValues[0].toUpperCase()));
-                    }
-
-                    if (itemValues.length > 1) {
-                        i.setAmount(Integer.parseInt(itemValues[1]));
-                    }
-
-                    if (itemValues.length > 2) {
-                        i = new ItemStack(i.getType(), i.getAmount(), (short) Integer.parseInt(itemValues[2]));
-                    }
-
-                    player.getInventory().addItem(i);
-                }
+    
+    public List<ItemStack> getFirstJoinKit() {
+        List<ItemStack> kit = new ArrayList<ItemStack>();
+        for (String s : FirstJoinPlus.getInstance().getConfig().getStringList("first-join-kit")) {
+            String[] item = s.split("\\:");
+            
+            Material mat = Material.AIR;
+            try {
+                mat = Material.getMaterial(item[0]);
+            } catch (Exception e) {
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit. Unknown item name: " + item[0]);
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Find and double check item names using this page:");
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html");
             }
-        }, plugin.getConfig().getLong("on-first-join.give-items.delay"));
+            
+            int amount = 1;
+            
+            if (item[1] != null && isNumber(item[1])) {
+                amount = Integer.parseInt(item[1]);
+            } else {
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit.");
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "The item amount must be a number: " + item[1]);
+            }
+            
+            kit.add(new ItemStack(mat, amount));
+        }
+        return kit;
     }
 
     public void giveWrittenBooks(final Player player) {
