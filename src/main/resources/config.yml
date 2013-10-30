@@ -1,48 +1,64 @@
-# FirstJoinPlus v1.8 Configuration -- Please see https://github.com/chaseoes/FirstJoinPlus/wiki/Configuration #
+# FirstJoinPlus Configuration -- Visit http://dev.bukkit.org/bukkit-plugins/firstjoinplus/ for help. #
 settings:
-  first-join-message: '&d%player-name has joined the game for the first time (%unique-players total players have joined)!'
-  teleport-delay: 0
-  notify-sound: LEVEL_UP
-  update-checking: true
-  debug: false
+  allow-automatic-updating: true
+  every-join-is-first-join: false
 on-first-join:
-  show-first-join-message: true
-  teleport: false
-  show-smoke: true
-  play-notify-sound: true
-  launch-firework: false
-  give-xp: 5
-  set-invincible: 0
-  give-items:
+  delay-everything-below-by: 0
+  first-join-message:
     enabled: true
-    delay: 0
+    message: '&d%player_name has joined for the first time!'
+  fun-stuff:
+    play-sound:
+      enabled: true
+      sound: level_up
+    smoke-effect:
+      enabled: true
+    launch-firework:
+      enabled: false
+  first-join-kit:
+    enabled: true
     items:
-    - WOOD_PICKAXE
-    - BREAD:5
-    - WOOL:10:6
+    - wood_sword
+    - wood_pickaxe
+    - wood_spade
+    - wood_axe
+    - bread:5
   give-written-books:
     enabled: false
-    delay: 0
     book-files:
     - rules.txt
-  send-motd:
+  give-experience:
     enabled: false
-    delay: 20
-    messages:
-    - '&2Welcome to our server, %player-name! Customize this message in the FirstJoinPlus configuration:'
-    - '&6http://dev.bukkit.org/server-mods/firstjoinplus/'
+    level-amount: 0
+  modify-damage:
+    disable-pvp:
+      enabled: false
+      expire-after: 10
+    god-mode:
+      enabled: false
+      expire-after: 10
   run-commands:
     enabled: false
-    commands-to-run:
+    commands:
     - me just joined for the first time!
   run-console-commands:
     enabled: false
-    commands-to-run:
-    - promote %player-name
+    commands:
+    - setgroup %player-name newbies
   apply-potion-effects:
     enabled: false
     effects:
     - SPEED:1:15
+  send-messages:
+    enabled: false
+    messages:
+    - '&2Welcome to our server, %player_name! Customize this message in the FirstJoinPlus configuration.'
+    - '&6http://dev.bukkit.org/server-mods/firstjoinplus/'
+  teleport:
+    enabled: false
+    x: 0
+    y: 64
+    z: 0
 other-messages:
   join-message:
     enabled: false
