@@ -154,11 +154,11 @@ public class Utilities {
     }
 
     public String formatVariables(String string, Player player) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "\n"));
+        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%country", GeoIPUtilities.getCountry(player)).replace("%city", GeoIPUtilities.getCity(player)).replace("%new-line", "\n"));
     }
 
     public String formatVariables(String string, Player player, String reason) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason).replace("%country", getCountry(player)).replace("%city", getCity(player)).replace("%new-line", "\n"));
+        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason).replace("%country", GeoIPUtilities.getCountry(player)).replace("%city", GeoIPUtilities.getCity(player)).replace("%new-line", "\n"));
     }
 
     public boolean isNumber(String s) {
@@ -168,26 +168,6 @@ public class Utilities {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    public String getCountry(Player player) {
-        if (plugin.getGeoIPLookup() != null) {
-            if (plugin.getGeoIPLookup().getLocation(player.getAddress().getAddress()) != null) {
-                return plugin.getGeoIPLookup().getLocation(player.getAddress().getAddress()).countryName;
-            }
-            return "unknown";
-        }
-        return "N/A";
-    }
-
-    public String getCity(Player player) {
-        if (plugin.getGeoIPLookup() != null) {
-            if (plugin.getGeoIPLookup().getLocation(player.getAddress().getAddress()) != null) {
-                return plugin.getGeoIPLookup().getLocation(player.getAddress().getAddress()).city;
-            }
-            return "unknown";
-        }
-        return "N/A";
     }
 
 }
