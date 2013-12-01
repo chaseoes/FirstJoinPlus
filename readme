@@ -1,5 +1,22 @@
-FirstJoinPlus v1.8.3
+FirstJoinPlus v2.0
 http://dev.bukkit.org/server-mods/firstjoinplus/
+
+v2.0
+Most code has been improved, optimized, and re-written!
+Most configuration options have changed -- please delete your configuration before updating and allow a new one to generate.
+Added the '/fjp debug' command to test all first-join actions, removed commands that are now covered by this one.
+Added the '/fjp help' command to list commands.
+Added ability to configure the notify permission node.
+Added automatic updating and updated Metrics.
+Fixed the 'could not save rules.txt' error being printed on every server start.
+Fixed the firework on first-join being the same every time, will now launch a completely random firework.
+Fixed the total amount of players variable not updating under certain circumstances.
+Removed the option to delay certain modules, added option to delay everything.
+Removed the ability to name items in the first-join kit.
+Changed some of the variables to have more accurate names.
+Updated variables -- here's what you can currently use: %player_name, %player_display_name, %total_players. If GeoIPTools is found, %player_country and %player_city can be used.
+Improved the invincibility module, you can now set god mode or disable PVP for a set amount of time.
+Fixed various other bugs and improved various other things.
 
 v1.8.3
 Added ability to delay giving items and written books (fixes certain plugin conflicts).

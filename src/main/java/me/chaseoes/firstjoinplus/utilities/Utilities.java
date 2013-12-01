@@ -2,172 +2,265 @@ package me.chaseoes.firstjoinplus.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 
+import me.chaseoes.firstjoinplus.FirstJoinEvent;
 import me.chaseoes.firstjoinplus.FirstJoinPlus;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 public class Utilities {
 
-    private FirstJoinPlus plugin;
-    static Utilities instance = new Utilities();
-    public HashSet<String> invincible = new HashSet<String>();
-
-    private Utilities() {
-
+    public static int getTotalPlayerCount() {
+        return FirstJoinPlus.getInstance().getServer().getOfflinePlayers().length;
     }
 
-    public static Utilities getUtilities() {
-        return instance;
+    public static Location getFirstJoinLocation() {
+        World world = FirstJoinPlus.getInstance().getServer().getWorld(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.teleport.world"));
+        int x = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.teleport.x");
+        int y = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.teleport.y");
+        int z = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.teleport.z");
+        float yaw = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.teleport.yaw");
+        float pitch = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.teleport.pitch");
+        return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
     }
 
-    public void setup(FirstJoinPlus p) {
-        plugin = p;
-    }
-
-    public String colorize(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
-    }
-
-    public int getUniquePlayerCount() {
-        return new File(plugin.getServer().getWorldContainer(),plugin.getServer().getWorlds().get(0).getName() + "/players/").list().length;
-    }
-
-    public Location getFirstJoinLocation() {
-        int x = plugin.getConfig().getInt("spawn.x");
-        int y = plugin.getConfig().getInt("spawn.y");
-        int z = plugin.getConfig().getInt("spawn.z");
-        float pitch = plugin.getConfig().getInt("spawn.pitch");
-        float yaw = plugin.getConfig().getInt("spawn.yaw");
-        return new Location(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")), x + 0.5, y, z + 0.5, yaw, pitch);
-    }
-    
-    public List<ItemStack> getFirstJoinKit() {
+    public static List<ItemStack> getFirstJoinKit() {
         List<ItemStack> kit = new ArrayList<ItemStack>();
-        for (String s : FirstJoinPlus.getInstance().getConfig().getStringList("first-join-kit")) {
+        for (String s : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.first-join-kit.items")) {
             String[] item = s.split("\\:");
-            
+
             Material mat = Material.AIR;
             try {
-                mat = Material.getMaterial(item[0]);
+                mat = Material.getMaterial(item[0].toUpperCase());
             } catch (Exception e) {
                 FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit. Unknown item name: " + item[0]);
                 FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Find and double check item names using this page:");
                 FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html");
             }
-            
+
             int amount = 1;
-            
-            if (item[1] != null && isNumber(item[1])) {
-                amount = Integer.parseInt(item[1]);
-            } else {
-                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit.");
-                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "The item amount must be a number: " + item[1]);
+            if (item.length > 1) {
+                if (item[1] != null && NumberUtils.isDigits(item[1])) {
+                    amount = Integer.parseInt(item[1]);
+                } else {
+                    FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit.");
+                    FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "The item amount must be a number: " + item[1]);
+                }
             }
-            
-            kit.add(new ItemStack(mat, amount));
+
+            ItemStack is = new ItemStack(mat, amount);
+            kit.add(is);
         }
         return kit;
     }
 
-    public void giveWrittenBooks(final Player player) {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                for (String file : plugin.getConfig().getStringList("on-first-join.give-written-books.book-files")) {
-                    ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-                    BookMeta bm = (BookMeta) book.getItemMeta();
-                    File f = new File(plugin.getDataFolder() + "/" + file);
-                    try {
-                        BufferedReader br = new BufferedReader(new FileReader(f));
-                        StringBuilder sb = new StringBuilder();
-                        String line = br.readLine();
-                        int i = 0;
+    public static List<ItemStack> getWrittenBooks() {
+        List<ItemStack> books = new ArrayList<ItemStack>();
+        for (String file : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.give-written-books.book-files")) {
+            ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+            BookMeta bm = (BookMeta) book.getItemMeta();
+            File f = new File(FirstJoinPlus.getInstance().getDataFolder() + "/" + file);
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                int i = 0;
 
-                        while (line != null) {
-                            i++;
-
-                            if (i != 1 && i != 2) {
-                                if (line.equalsIgnoreCase("/newpage") || line.equalsIgnoreCase("/np")) {
-                                    bm.addPage(sb.toString());
-                                    sb = new StringBuilder();
-                                } else {
-                                    sb.append(Utilities.getUtilities().colorize(line));
-                                    sb.append("\n");
-                                }
-                            } else {
-                                if (i == 1) {
-                                    bm.setTitle(Utilities.getUtilities().colorize(line));
-                                }
-                                if (i == 2) {
-                                    bm.setAuthor(Utilities.getUtilities().colorize(line));
-                                }
-                            }
-                            line = br.readLine();
+                while (line != null) {
+                    i++;
+                    if (i != 1 && i != 2) {
+                        if (line.equalsIgnoreCase("/newpage") || line.equalsIgnoreCase("/np")) {
+                            bm.addPage(sb.toString());
+                            sb = new StringBuilder();
+                        } else {
+                            sb.append(translateColors(line));
+                            sb.append("\n");
                         }
-
-                        br.close();
-                        bm.addPage(sb.toString());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        plugin.getLogger().log(Level.WARNING, "Error encountered while trying to give a new player a written book! (File " + file + ")");
-                        plugin.getLogger().log(Level.WARNING, "Please check that the file exists and is readable.");
+                    } else {
+                        if (i == 1) {
+                            bm.setTitle(translateColors(line));
+                        }
+                        if (i == 2) {
+                            bm.setAuthor(translateColors(line));
+                        }
                     }
-
-                    book.setItemMeta(bm);
-                    player.getInventory().addItem(book);
+                    line = br.readLine();
                 }
+
+                br.close();
+                bm.addPage(sb.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                FirstJoinPlus.getInstance().getLogger().log(Level.WARNING, "Error encountered while trying to give a new player a written book! (File: " + file + ")");
+                FirstJoinPlus.getInstance().getLogger().log(Level.WARNING, "Please check that the file exists and is readable.");
             }
-        }, plugin.getConfig().getLong("on-first-join.give-written-books.delay"));
+
+            book.setItemMeta(bm);
+            books.add(book);
+        }
+        return books;
     }
 
-    public void playSmoke(Location loc) {
-        for (int i = 0; i <= 25; i++) {
-            loc.getWorld().playEffect(loc, Effect.SMOKE, i);
+    public static void launchRandomFirework(Location location) {
+        Random random = new Random();
+        Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        FireworkMeta meta = fw.getFireworkMeta();
+
+        meta.setPower(1 + random.nextInt(4));
+        FireworkEffect.Builder builder = FireworkEffect.builder().
+                trail(random.nextBoolean()).
+                flicker(random.nextBoolean());
+
+        builder.with(FireworkEffect.Type.values()[random.nextInt(FireworkEffect.Type.values().length)]);
+        Set<Color> colors = new HashSet<Color>();
+        for (int i = 0; i < 3; i++) {
+            colors.add(Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        }
+
+        builder.withColor(colors);
+        meta.addEffect(builder.build());
+        fw.setFireworkMeta(meta);
+    }
+
+    public static String replaceVariables(String string, Player player) {
+        string = string.replace("%player_name", player.getName());
+        string = string.replace("%player_display_name", player.getDisplayName());
+        string = string.replace("%player_country", GeoIPUtilities.getCountry(player));
+        string = string.replace("%player_city", GeoIPUtilities.getCity(player));
+        string = string.replace("%total_players", getTotalPlayerCount() + "");
+        return translateColors(string);
+    }
+
+    public static String replaceVariables(String string, Player player, String reason) {
+        return replaceVariables(string.replace("%reason", reason), player);
+    }
+
+    public static String translateColors(String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+    public static String formatCommandResponse(String string) {
+        return ChatColor.YELLOW + "[FJP] " + ChatColor.GRAY + string;
+    }
+
+    public static String getNoPermissionMessage() {
+        return formatCommandResponse(ChatColor.RED + "You don't have permission to do that.");
+    }
+
+    public static void copyDefaultFiles() {
+        FirstJoinPlus.getInstance().getConfig().options().header("FirstJoinPlus Version " + FirstJoinPlus.getInstance().getDescription().getVersion() + " Configuration -- Configuration Help: http://dev.bukkit.org/bukkit-plugins/firstjoinplus/ #");
+        FirstJoinPlus.getInstance().getConfig().options().copyDefaults(true);
+        FirstJoinPlus.getInstance().getConfig().options().copyHeader(true);
+        FirstJoinPlus.getInstance().saveConfig();
+
+        String[] files = new String[] { };
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
+            files = new String[] { "rules.txt" };
+        }
+
+        for (String resourcePath : files) {
+            if (resourcePath == null || resourcePath.equals("")) {
+                return;
+            }
+
+            resourcePath = resourcePath.replace('\\', '/');
+            InputStream in = FirstJoinPlus.getInstance().getResource(resourcePath);
+            if (in == null) {
+                return;
+            }
+
+            File outFile = new File(FirstJoinPlus.getInstance().getDataFolder(), resourcePath);
+            int lastIndex = resourcePath.lastIndexOf('/');
+            File outDir = new File(FirstJoinPlus.getInstance().getDataFolder(), resourcePath.substring(0, lastIndex >= 0 ? lastIndex : 0));
+
+            if (!outDir.exists()) {
+                outDir.mkdirs();
+            }
+
+            try {
+                if (!outFile.exists()) {
+                    OutputStream out = new FileOutputStream(outFile);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    out.close();
+                    in.close();
+                }
+            } catch (IOException ex) {
+
+            }
         }
     }
 
-    public void playFirework(Location loc) {
-        Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
-        FireworkMeta fm = fw.getFireworkMeta();
-        FireworkEffect effect = FireworkEffect.builder().trail(true).flicker(false).withColor(Color.PURPLE).withFade(Color.PURPLE).with(Type.BALL_LARGE).build();
-        fm.addEffect(effect);
-        fm.setPower(2);
-        fw.setFireworkMeta(fm);
-    }
+    public static void debugPlayer(Player player, boolean b) {
+        player.getInventory().clear();
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
+        player.setHealth(player.getMaxHealth());
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setExhaustion(0);
+        player.setExp(0);
+        player.setFoodLevel(20);
+        player.setLevel(0);
+        player.setSaturation(0);
+        player.closeInventory();
+        player.setGameMode(FirstJoinPlus.getInstance().getServer().getDefaultGameMode());
 
-    public String formatVariables(String string, Player player) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%country", GeoIPUtilities.getCountry(player)).replace("%city", GeoIPUtilities.getCity(player)).replace("%new-line", "\n"));
-    }
-
-    public String formatVariables(String string, Player player, String reason) {
-        return colorize(string.replace("%player-name", player.getName()).replace("%player-display-name", player.getDisplayName()).replace("%unique-players", getUniquePlayerCount() + "").replace("%reason", reason).replace("%country", GeoIPUtilities.getCountry(player)).replace("%city", GeoIPUtilities.getCity(player)).replace("%new-line", "\n"));
-    }
-
-    public boolean isNumber(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+        if (b) {
+            FirstJoinPlus.getInstance().getServer().getPluginManager().callEvent(new FirstJoinEvent(new PlayerJoinEvent(player, player.getName() + " joined for the first time!")));
         }
+    }
+
+    public static boolean updateNeeded(String localVersion, String remoteVersion) {
+        String[] vals1 = localVersion.split("\\.");
+        String[] vals2 = remoteVersion.split("\\.");
+        int result;
+        int i = 0;
+
+        while(i<vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
+            i++;
+        }
+
+        if (i<vals1.length && i < vals2.length) {
+            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            result = Integer.signum(diff);
+        } else {
+            result = Integer.signum(vals1.length - vals2.length);
+        }
+
+        if (result == -1) {
+            return true; // DBO version higher than local version, update needed.
+        }
+        return false; // DBO version lower than local version, no update needed.
     }
 
 }

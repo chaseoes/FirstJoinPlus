@@ -32,10 +32,10 @@ public class FirstJoinEvent extends Event {
     public void setFirstJoinMessage(String message) {
         e.setJoinMessage(message);
     }
-    
-    public Location getLocation() {
-        if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.teleport")) {
-            return Utilities.getUtilities().getFirstJoinLocation();
+
+    public Location getFirstJoinLocation() {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.teleport.enabled")) {
+            return Utilities.getFirstJoinLocation();
         }
         return e.getPlayer().getLocation();
     }

@@ -1,5 +1,5 @@
 &bOur Rules
-Random Author
+chaseoes
 This is the first page!
 
 &lPlease read our rules!
@@ -7,4 +7,5 @@ This is the first page!
 This is page 2 of the book!
 /newpage
 Wow, page 3 of the book!
-Have you tried &acolor codes?
+
+Have you tried &acolor codes&0?

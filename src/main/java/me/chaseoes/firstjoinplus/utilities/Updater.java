@@ -372,7 +372,7 @@ public class Updater {
                                 }
                             }
                             if (!found) {
-                                // Move the new file into the current dir
+                                // Move the new file into the current di
                                 cFile.renameTo(new File(oFile.getCanonicalFile() + "/" + cFile.getName()));
                             } else {
                                 // This file already exists, so we don't need it anymore.
@@ -414,7 +414,7 @@ public class Updater {
             if (title.split(" v").length == 2) {
                 final String remoteVersion = title.split(" v")[1].split(" ")[0]; // Get the newest file's version number
 
-                if (this.hasTag(version) || version.equalsIgnoreCase(remoteVersion)) {
+                if (this.hasTag(version) || version.equalsIgnoreCase(remoteVersion) || !Utilities.updateNeeded(version, remoteVersion)) {
                     // We already have the latest version, or this build is tagged for no-update
                     this.result = Updater.UpdateResult.NO_UPDATE;
                     return false;

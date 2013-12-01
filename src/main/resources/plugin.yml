@@ -1,28 +1,20 @@
-name: FirstJoinPlus
-main: me.chaseoes.firstjoinplus.FirstJoinPlus
-description: Control all aspects of new players joining for the first time.
+name: ${project.name}
+main: ${project.groupId}.${upload.dbo.slug}.${project.name}
+version: ${project.version}
+description: ${project.description}
 author: chaseoes
-version: 2.0
-dev-url: http://dev.bukkit.org/server-mods/firstjoinplus/
-website: http://dev.bukkit.org/server-mods/firstjoinplus/
+dev-url: http://dev.bukkit.org/server-mods/${upload.dbo.slug}/
+website: http://dev.bukkit.org/server-mods/${upload.dbo.slug}/
 softdepend: [GeoIPTools]
 commands:
-  firstjoinplus:
-    description: FirstJoinPlus command(s).
+  ${upload.dbo.slug}:
+    description: ${project.name} command(s).
     aliases: fjp
-    usage: /firstjoinplus <reload|setspawn|spawn|items|motd>
+    usage: /${upload.dbo.slug} [reload|setspawn|debug]
 permissions:
-  firstjoinplus.reload:
-    description: Permission to use the /firstjoinplus reload command.
-  firstjoinplus.motd:
-    description: Permission to use the /firstjoinplus motd command.
-  firstjoinplus.setspawn:
-    description: Permission to use the /firstjoinplus setspawn command.
-  firstjoinplus.items:
-    description: Permission to use the /firstjoinplus items command.
-  firstjoinplus.spawn:
-    description: Permission to use the /firstjoinplus spawn command.
-  firstjoinplus.notify:
-    description: Players with this permission will hear a sound when a new player joins.
-  firstjoinplus.notify-update:
-    description: Players with this permission will be notified about updates.
+  ${upload.dbo.slug}.reload:
+    description: Permission to use the /${upload.dbo.slug} reload command.
+  ${upload.dbo.slug}.setspawn:
+    description: Permission to use the /${upload.dbo.slug} setspawn command.
+  ${upload.dbo.slug}.debug:
+    description: Permission to use the /${upload.dbo.slug} debug command.

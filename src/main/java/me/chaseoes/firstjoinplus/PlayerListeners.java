@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -15,63 +16,69 @@ public class PlayerListeners implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void firstJoinDetection(PlayerJoinEvent event) {
-        // Define our variables.
         Player player = event.getPlayer();
-        Boolean b = player.hasPlayedBefore();
-        if (FirstJoinPlus.getInstance().getConfig().getBoolean("settings.debug")) {
-            b = false;
-            player.setLevel(0);
-            player.setHealth(20);
-            player.setFoodLevel(20);
+        boolean existingPlayer = player.hasPlayedBefore();
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("settings.every-join-is-first-join")) {
+            existingPlayer = false;
+            Utilities.debugPlayer(player, false);
         }
 
-        // Call the first join event.
-        if (!b) {
+        if (!existingPlayer) {
             FirstJoinPlus.getInstance().getServer().getPluginManager().callEvent(new FirstJoinEvent(event));
             return;
         }
     }
 
-    @EventHandler
-    public void onPlayerDamage(EntityDamageEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (Utilities.getUtilities().invincible.contains(player.getName())) {
+            if (FirstJoinPlus.getInstance().godMode.contains(((Player) event.getEntity()).getName())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+            if (FirstJoinPlus.getInstance().noPVP.contains(((Player) event.getEntity()).getName()) || FirstJoinPlus.getInstance().noPVP.contains(((Player) event.getDamager()).getName())) {
                 event.setCancelled(true);
             }
         }
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.join-message.enabled") && event.getPlayer().hasPlayedBefore()) {
-            String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.join-message.message");
-            if (!message.equalsIgnoreCase("%none")) {
-                event.setJoinMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
-            } else {
-                event.setJoinMessage(null);
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.join-message.enabled")) {
+            if (event.getPlayer().hasPlayedBefore() || (!FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.first-join-message.enabled") && !event.getPlayer().hasPlayedBefore())) {
+                String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.join-message.message");
+                if (!message.equalsIgnoreCase("%none")) {
+                    event.setJoinMessage(Utilities.replaceVariables(message, event.getPlayer()));
+                } else {
+                    event.setJoinMessage(null);
+                }
             }
         }
     }
-    
+
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.quit-message.enabled")) {
             String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.quit-message.message");
             if (!message.equalsIgnoreCase("%none")) {
-                event.setQuitMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer()));
+                event.setQuitMessage(Utilities.replaceVariables(message, event.getPlayer()));
             } else {
                 event.setQuitMessage(null);
             }
         }
     }
-    
+
     @EventHandler
-    public void onKick(PlayerKickEvent event) {
+    public void onPlayerKick(PlayerKickEvent event) {
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("other-messages.kick-message.enabled")) {
             String message = FirstJoinPlus.getInstance().getConfig().getString("other-messages.kick-message.message");
             if (!message.equalsIgnoreCase("%none")) {
-                event.setLeaveMessage(Utilities.getUtilities().formatVariables(message, event.getPlayer(), event.getReason()));
+                event.setLeaveMessage(Utilities.replaceVariables(message, event.getPlayer(), event.getReason()));
             } else {
                 event.setLeaveMessage(null);
             }

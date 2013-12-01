@@ -5,138 +5,116 @@ import java.util.List;
 
 import me.chaseoes.firstjoinplus.utilities.Utilities;
 
-import org.bukkit.Location;
+import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class FirstJoinListener implements Listener {
 
-    private final JavaPlugin plugin;
-
-    public FirstJoinListener(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onFirstJoin(final FirstJoinEvent event) {
-
-        // Variables!
         final Player player = event.getPlayer();
 
-        // Show the first join message.
-        if (plugin.getConfig().getBoolean("on-first-join.show-first-join-message")) {
-            event.setFirstJoinMessage(Utilities.getUtilities().formatVariables(plugin.getConfig().getString("settings.first-join-message"), player));
+        if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.first-join-message.enabled")) {
+            event.setFirstJoinMessage(Utilities.replaceVariables(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.first-join-message.message"), player));
         }
 
-        // Give a player an item on their first join.
-        if (plugin.getConfig().getBoolean("on-first-join.give-items.enabled")) {
-            // Utilities.getUtilities().giveFirstJoinItems(player);
-        }
+        FirstJoinPlus.getInstance().getServer().getScheduler().runTaskLater(FirstJoinPlus.getInstance(), new Runnable() {
+            public void run() {
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.teleport.enabled")) {
+                    player.teleport(event.getFirstJoinLocation());
+                }
 
-        // Show the first join MOTD.
-        if (plugin.getConfig().getBoolean("on-first-join.send-motd.enabled")) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    for (String motdStr : plugin.getConfig().getStringList("on-first-join.send-motd.messages")) {
-                        player.sendMessage(Utilities.getUtilities().formatVariables(motdStr, player));
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.first-join-kit.enabled")) {
+                    for (ItemStack i : Utilities.getFirstJoinKit()) {
+                        player.getInventory().addItem(i);
                     }
                 }
-            }, plugin.getConfig().getLong("on-first'join.send-motd.delay"));
-        }
 
-        // Teleport the player to the first join spawnpoint.
-        if (plugin.getConfig().getBoolean("on-first-join.teleport")) {
-            final Location loc = event.getLocation();
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    player.teleport(loc);
-                    if (plugin.getConfig().getBoolean("on-first-join.show-smoke")) {
-                        Utilities.getUtilities().playSmoke(loc);
-                    }
-                    
-                    if (plugin.getConfig().getBoolean("on-first-join.launch-firework")) {
-                        Utilities.getUtilities().playFirework(event.getLocation());
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
+                    for (ItemStack i : Utilities.getWrittenBooks()) {
+                        player.getInventory().addItem(i);
                     }
                 }
-            }, plugin.getConfig().getLong("settings.teleport-delay"));
-        }
 
-        // Show some fancy smoke!
-        if (!plugin.getConfig().getBoolean("on-first-join.teleport")) {
-            Utilities.getUtilities().playSmoke(event.getLocation());
-        }
-        
-        // Launch a firework!
-        if (plugin.getConfig().getBoolean("on-first-join.launch-firework") && !plugin.getConfig().getBoolean("on-first-join.teleport")) {
-            Utilities.getUtilities().playFirework(event.getLocation());
-        }
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.give-experience.enabled")) {
+                    player.setLevel(FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.give-experience.level-amount"));
+                }
 
-        // Play a sound!
-        if (plugin.getConfig().getBoolean("on-first-join.play-notify-sound")) {
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if (p.hasPermission("firstjoinplus.notify")) {
-                    Sound s = Sound.valueOf(plugin.getConfig().getString("settings.notify-sound"));
-                    p.playSound(p.getLocation(), s, 1, 1);
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.send-messages.enabled")) {
+                    for (String message : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.send-messages.messages")) {
+                        player.sendMessage(Utilities.replaceVariables(message, player));
+                    }
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.fun-stuff.play-sound.enabled")) {
+                    for (Player p : FirstJoinPlus.getInstance().getServer().getOnlinePlayers()) {
+                        if (p.hasPermission(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.fun-stuff.play-sound.listen-permission"))) {
+                            Sound s = Sound.valueOf(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.fun-stuff.play-sound.sound").toUpperCase());
+                            p.playSound(event.getFirstJoinLocation(), s, 1, 1);
+                        }
+                    }
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.fun-stuff.smoke-effect.enabled")) {
+                    for (int i = 0; i <= 25; i++) {
+                        event.getFirstJoinLocation().getWorld().playEffect(event.getFirstJoinLocation(), Effect.SMOKE, i);
+                    }
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.fun-stuff.launch-firework.enabled")) {
+                    Utilities.launchRandomFirework(event.getFirstJoinLocation());
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.run-commands.enabled")) {
+                    for (String command : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.run-commands.commands")) {
+                        String cmnd = Utilities.replaceVariables(command, player);
+                        player.performCommand(cmnd);
+                    }
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.run-console-commands.enabled")) {
+                    for (String command : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.run-console-commands.commands")) {
+                        String cmnd = Utilities.replaceVariables(command, player);
+                        FirstJoinPlus.getInstance().getServer().dispatchCommand(FirstJoinPlus.getInstance().getServer().getConsoleSender(), cmnd);
+                    }
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.apply-potion-effects.enabled")) {
+                    List<PotionEffect> effects = new ArrayList<PotionEffect>();
+                    for (String s : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.apply-potion-effects.effects")) {
+                        String[] effect = s.split("\\:");
+                        effects.add(new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()), Integer.parseInt(effect[2]) * 20, (Integer.parseInt(effect[1])) - 1));
+                    }
+                    player.addPotionEffects(effects);
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.modify-damage.disable-pvp.enabled")) {
+                    int expire = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.modify-damage.disable-pvp.expire-after");
+                    FirstJoinPlus.getInstance().noPVP.add(player.getName());
+                    FirstJoinPlus.getInstance().getServer().getScheduler().runTaskLater(FirstJoinPlus.getInstance(), new Runnable() {
+                        public void run() {
+                            FirstJoinPlus.getInstance().noPVP.remove(player.getName());
+                        }
+                    }, expire * 20L);
+                }
+
+                if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.modify-damage.god-mode.enabled")) {
+                    int expire = FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.modify-damage.god-mode.expire-after");
+                    FirstJoinPlus.getInstance().godMode.add(player.getName());
+                    FirstJoinPlus.getInstance().getServer().getScheduler().runTaskLater(FirstJoinPlus.getInstance(), new Runnable() {
+                        public void run() {
+                            FirstJoinPlus.getInstance().godMode.remove(player.getName());
+                        }
+                    }, expire * 20L);
                 }
             }
-        }
-
-        // Give some XP!
-        if (plugin.getConfig().getInt("on-first-join.give-xp") != 0) {
-            player.setLevel(plugin.getConfig().getInt("on-first-join.give-xp"));
-        }
-
-        // Run some commands!
-        if (plugin.getConfig().getBoolean("on-first-join.run-commands.enabled")) {
-            for (String command : plugin.getConfig().getStringList("on-first-join.run-commands.commands-to-run")) {
-                String cmnd = Utilities.getUtilities().formatVariables(command, player);
-                player.performCommand(cmnd);
-            }
-        }
-
-        // Run some more commands!
-        if (plugin.getConfig().getBoolean("on-first-join.run-console-commands.enabled")) {
-            for (String command : plugin.getConfig().getStringList("on-first-join.run-console-commands.commands-to-run")) {
-                String cmnd = Utilities.getUtilities().formatVariables(command, player);
-                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmnd);
-            }
-        }
-
-        // Make the player invincible for x seconds.
-        Integer invincible = plugin.getConfig().getInt("on-first-join.set-invincible");
-        if (invincible != 0) {
-            Utilities.getUtilities().invincible.add(player.getName());
-            final Player p = player;
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    Utilities.getUtilities().invincible.remove(p.getName());
-                }
-            }, invincible * 20L);
-        }
-
-        // Written books!
-        if (plugin.getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
-            Utilities.getUtilities().giveWrittenBooks(player);
-        }
-        
-        // Apply potion effects!
-        if (plugin.getConfig().getBoolean("on-first-join.apply-potion-effects.enabled")) {
-            List<PotionEffect> effects = new ArrayList<PotionEffect>();
-            for (String s : plugin.getConfig().getStringList("on-first-join.apply-potion-effects.effects")) {
-                String[] effect = s.split("\\:");
-                effects.add(new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()), Integer.parseInt(effect[2]) * 20, (Integer.parseInt(effect[1])) - 1));
-            }
-            player.addPotionEffects(effects);
-        }
-
+        }, FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.delay-everything-below-by"));
     }
-
+    
 }

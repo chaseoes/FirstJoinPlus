@@ -1,4 +1,4 @@
-# FirstJoinPlus Configuration -- Visit http://dev.bukkit.org/bukkit-plugins/firstjoinplus/ for help. #
+# FirstJoinPlus Configuration -- Configuration Help: http://dev.bukkit.org/bukkit-plugins/firstjoinplus/ #
 settings:
   allow-automatic-updating: true
   every-join-is-first-join: false
@@ -11,6 +11,7 @@ on-first-join:
     play-sound:
       enabled: true
       sound: level_up
+      listen-permission: firstjoinplus.notify
     smoke-effect:
       enabled: true
     launch-firework:
@@ -44,7 +45,7 @@ on-first-join:
   run-console-commands:
     enabled: false
     commands:
-    - setgroup %player-name newbies
+    - setgroup %player_name newbies
   apply-potion-effects:
     enabled: false
     effects:
@@ -59,13 +60,16 @@ on-first-join:
     x: 0
     y: 64
     z: 0
+    pitch: 0
+    yaw: 0
+    world: world
 other-messages:
   join-message:
     enabled: false
-    message: '&e%player-name joined the game.'
+    message: '&e%player_name joined the game.'
   quit-message:
     enabled: false
-    message: '&e%player-name left the game.'
+    message: '&e%player_name left the game.'
   kick-message:
     enabled: false
     message: '%none'
