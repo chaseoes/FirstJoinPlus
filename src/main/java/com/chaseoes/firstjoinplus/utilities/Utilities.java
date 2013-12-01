@@ -1,4 +1,4 @@
-package me.chaseoes.firstjoinplus.utilities;
+package com.chaseoes.firstjoinplus.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 
-import me.chaseoes.firstjoinplus.FirstJoinEvent;
-import me.chaseoes.firstjoinplus.FirstJoinPlus;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
@@ -31,6 +29,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import com.chaseoes.firstjoinplus.FirstJoinEvent;
+import com.chaseoes.firstjoinplus.FirstJoinPlus;
 
 public class Utilities {
 

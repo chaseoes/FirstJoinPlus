@@ -1,9 +1,8 @@
-package me.chaseoes.firstjoinplus;
+package com.chaseoes.firstjoinplus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -13,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 public class FirstJoinListener implements Listener {
 

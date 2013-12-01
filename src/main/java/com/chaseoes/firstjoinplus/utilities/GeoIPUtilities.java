@@ -1,8 +1,9 @@
-package me.chaseoes.firstjoinplus.utilities;
+package com.chaseoes.firstjoinplus.utilities;
 
-import me.chaseoes.firstjoinplus.FirstJoinPlus;
 
 import org.bukkit.entity.Player;
+
+import com.chaseoes.firstjoinplus.FirstJoinPlus;
 
 public class GeoIPUtilities {
     

@@ -1,4 +1,4 @@
-package me.chaseoes.firstjoinplus;
+package com.chaseoes.firstjoinplus;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import me.chaseoes.firstjoinplus.utilities.Metrics;
-import me.chaseoes.firstjoinplus.utilities.Updater;
-import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,6 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.chaseoes.firstjoinplus.utilities.Metrics;
+import com.chaseoes.firstjoinplus.utilities.Updater;
+import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 import uk.org.whoami.geoip.GeoIPLookup;
 import uk.org.whoami.geoip.GeoIPTools;

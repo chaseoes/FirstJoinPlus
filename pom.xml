@@ -4,7 +4,7 @@
 	<description>Customize all aspects of new players joining for the first time.</description>
 	<version>2.0</version>
 
-	<groupId>me.chaseoes</groupId>
+	<groupId>com.chaseoes</groupId>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>${project.name}</artifactId>
 	<url>https://github.com/chaseoes/${project.name}</url>

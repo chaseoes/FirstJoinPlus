@@ -1,6 +1,5 @@
-package me.chaseoes.firstjoinplus;
+package com.chaseoes.firstjoinplus;
 
-import me.chaseoes.firstjoinplus.utilities.Utilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +10,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 public class PlayerListeners implements Listener {
 
