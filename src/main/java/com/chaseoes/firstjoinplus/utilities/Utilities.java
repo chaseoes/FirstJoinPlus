@@ -153,6 +153,7 @@ public class Utilities {
         string = string.replace("%player_country", GeoIPUtilities.getCountry(player));
         string = string.replace("%player_city", GeoIPUtilities.getCity(player));
         string = string.replace("%total_players", getTotalPlayerCount() + "");
+        string = string.replace("%new_line", "\n");
         return translateColors(string);
     }
 
