@@ -55,6 +55,8 @@ on-first-join:
     messages:
     - '&2Welcome to our server, %player_name! Customize this message in the FirstJoinPlus configuration.'
     - '&6http://dev.bukkit.org/server-mods/firstjoinplus/'
+  reset-state:
+    enabled: false
   teleport:
     enabled: false
     x: 0
