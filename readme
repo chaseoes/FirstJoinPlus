@@ -2,7 +2,9 @@ FirstJoinPlus v2.1
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
 v2.1
+Compatible with the latest Craftbukkit beta build (1.7.2-R0.2).
 Added the 'reset-state' configuration option to toggle completely resetting the state of a player when using '/fjp debug' or the 'every-join-is-first-join' option.
+Added a '%new_line' variable to start a new line in messages such as the first-join message.
 Fixed only hearing the sound defined under the "play-sound" option if you are near the first-join location.
 
 v2.0
