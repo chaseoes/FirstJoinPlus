@@ -146,6 +146,10 @@ public class Utilities {
         meta.addEffect(builder.build());
         fw.setFireworkMeta(meta);
     }
+    
+    public static Player getRandomPlayer() {
+        return FirstJoinPlus.getInstance().getServer().getOnlinePlayers()[new Random().nextInt(FirstJoinPlus.getInstance().getServer().getOnlinePlayers().length)]; 
+    }
 
     public static String replaceVariables(String string, Player player) {
         string = string.replace("%player_name", player.getName());
@@ -153,6 +157,7 @@ public class Utilities {
         string = string.replace("%player_country", GeoIPUtilities.getCountry(player));
         string = string.replace("%player_city", GeoIPUtilities.getCity(player));
         string = string.replace("%total_players", getTotalPlayerCount() + "");
+        string = string.replace("%random_player", getRandomPlayer().getDisplayName() + "");
         string = string.replace("%new_line", "\n");
         return translateColors(string);
     }
