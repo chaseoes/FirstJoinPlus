@@ -1,6 +1,10 @@
 FirstJoinPlus v2.1
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v2.2
+Compatible with the latest Craftbukkit beta build (1.7.2-R0.3).
+Added a %random_player variable for getting the (display) name of a random player.
+
 v2.1
 Compatible with the latest Craftbukkit beta build (1.7.2-R0.2).
 Added the 'reset-state' configuration option to toggle completely resetting the state of a player when using '/fjp debug' or the 'every-join-is-first-join' option.
