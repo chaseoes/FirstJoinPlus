@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,20 +15,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.chaseoes.firstjoinplus.utilities.Metrics;
-import com.chaseoes.firstjoinplus.utilities.Updater;
-import com.chaseoes.firstjoinplus.utilities.Utilities;
+import org.mcstats.Metrics;
 
 import uk.org.whoami.geoip.GeoIPLookup;
 import uk.org.whoami.geoip.GeoIPTools;
+
+import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 public class FirstJoinPlus extends JavaPlugin {
 
     public String smile = "Girls with the prettiest smiles, have the saddest stories.";
     private static FirstJoinPlus instance;
     public Updater updater;
-    
+
     public List<String> noPVP = new ArrayList<String>();
     public List<String> godMode = new ArrayList<String>();
 
@@ -35,7 +35,6 @@ public class FirstJoinPlus extends JavaPlugin {
         return instance;
     }
 
-    @Override
     public void onEnable() {
         instance = this;
         PluginManager pm = getServer().getPluginManager();
@@ -67,14 +66,12 @@ public class FirstJoinPlus extends JavaPlugin {
         }
     }
 
-    @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
         reloadConfig();
         saveConfig();
     }
 
-    @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
         if (strings.length == 0) {
             cs.sendMessage(ChatColor.YELLOW + "[FirstJoinPlus] " + ChatColor.GRAY + "Version " + ChatColor.AQUA + getDescription().getVersion() + ChatColor.GRAY + " by " + getDescription().getAuthors().get(0) + ".");
@@ -95,7 +92,7 @@ public class FirstJoinPlus extends JavaPlugin {
             cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp debug" + ChatColor.GRAY + ": Become a new player!"));
             return true;
         }
-        
+
         if (strings[0].equalsIgnoreCase("reload")) {
             if (cs.hasPermission("firstjoinplus.reload")) {
                 reloadConfig();
@@ -107,7 +104,7 @@ public class FirstJoinPlus extends JavaPlugin {
             }
             return true;
         }
-        
+
         if (!(cs instanceof Player)) {
             cs.sendMessage(Utilities.formatCommandResponse("You must be a player to do that."));
             return true;

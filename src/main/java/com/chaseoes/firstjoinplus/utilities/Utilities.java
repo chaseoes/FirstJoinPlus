@@ -146,7 +146,7 @@ public class Utilities {
         meta.addEffect(builder.build());
         fw.setFireworkMeta(meta);
     }
-    
+
     public static Player getRandomPlayer() {
         return FirstJoinPlus.getInstance().getServer().getOnlinePlayers()[new Random().nextInt(FirstJoinPlus.getInstance().getServer().getOnlinePlayers().length)]; 
     }
@@ -245,29 +245,6 @@ public class Utilities {
         if (b) {
             FirstJoinPlus.getInstance().getServer().getPluginManager().callEvent(new FirstJoinEvent(new PlayerJoinEvent(player, player.getName() + " joined for the first time!")));
         }
-    }
-
-    public static boolean updateNeeded(String localVersion, String remoteVersion) {
-        String[] vals1 = localVersion.split("\\.");
-        String[] vals2 = remoteVersion.split("\\.");
-        int result;
-        int i = 0;
-
-        while(i<vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
-            i++;
-        }
-
-        if (i<vals1.length && i < vals2.length) {
-            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
-            result = Integer.signum(diff);
-        } else {
-            result = Integer.signum(vals1.length - vals2.length);
-        }
-
-        if (result == -1) {
-            return true; // DBO version higher than local version, update needed.
-        }
-        return false; // DBO version lower than local version, no update needed.
     }
 
 }

@@ -2,8 +2,9 @@ FirstJoinPlus v2.2
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
 v2.2
-Compatible with the latest Craftbukkit beta build (1.7.2-R0.3).
+Compatible with the latest Craftbukkit beta build (1.7.9-R0.2) and above.
 Added a %random_player variable for getting the (display) name of a random player.
+Minor code optimizations and fixes, general cleanup.
 
 v2.1
 Compatible with the latest Craftbukkit beta build (1.7.2-R0.2).

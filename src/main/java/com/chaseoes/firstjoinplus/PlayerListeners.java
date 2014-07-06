@@ -26,7 +26,7 @@ public class PlayerListeners implements Listener {
         if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.reset-state.enabled")) {
             Utilities.debugPlayer(player, false);
         }
-        
+
         if (!existingPlayer) {
             FirstJoinPlus.getInstance().getServer().getPluginManager().callEvent(new FirstJoinEvent(event));
             return;

@@ -117,5 +117,5 @@ public class FirstJoinListener implements Listener {
             }
         }, FirstJoinPlus.getInstance().getConfig().getInt("on-first-join.delay-everything-below-by"));
     }
-    
+
 }

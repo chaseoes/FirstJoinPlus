@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 public class FirstJoinEvent extends Event {
+
     private static final HandlerList handlers = new HandlerList();
     public PlayerJoinEvent e;
 
@@ -17,7 +18,6 @@ public class FirstJoinEvent extends Event {
         e = event;
     }
 
-    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
@@ -40,4 +40,5 @@ public class FirstJoinEvent extends Event {
         }
         return e.getPlayer().getLocation();
     }
+
 }
