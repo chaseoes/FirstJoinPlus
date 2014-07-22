@@ -24,9 +24,8 @@ import com.chaseoes.firstjoinplus.utilities.Utilities;
 
 public class FirstJoinPlus extends JavaPlugin {
 
-    public String smile = "Girls with the prettiest smiles, have the saddest stories.";
     private static FirstJoinPlus instance;
-    public Updater updater;
+    public String smile = "Girls with the prettiest smiles, have the saddest stories.";
 
     public List<String> noPVP = new ArrayList<String>();
     public List<String> godMode = new ArrayList<String>();
@@ -55,7 +54,7 @@ public class FirstJoinPlus extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("settings.allow-automatic-updating")) {
-            updater = new Updater(this, 37766, getFile(), Updater.UpdateType.DEFAULT, true);
+            new Updater(this, 37766, getFile(), Updater.UpdateType.DEFAULT, true);
         }
 
         try {
