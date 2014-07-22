@@ -125,6 +125,7 @@ public class FirstJoinPlus extends JavaPlugin {
             } else {
                 cs.sendMessage(Utilities.getNoPermissionMessage());
             }
+            return true;
         }
 
         if (strings[0].equalsIgnoreCase("debug")) {
@@ -133,7 +134,10 @@ public class FirstJoinPlus extends JavaPlugin {
             } else {
                 cs.sendMessage(Utilities.getNoPermissionMessage());
             }
+            return true;
         }
+        
+        cs.sendMessage(Utilities.formatCommandResponse("Unknown command. Type " + ChatColor.AQUA + "/fjp help" + ChatColor.GRAY + " for help."));
         return true;
     }
 
