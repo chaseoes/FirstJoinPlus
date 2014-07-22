@@ -88,7 +88,7 @@ public class FirstJoinPlus extends JavaPlugin {
             cs.sendMessage(Utilities.formatCommandResponse("Available Commands:"));
             cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp" + ChatColor.GRAY + ": General plugin information."));
             cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp reload" + ChatColor.GRAY + ": Reloads the configuration."));
-            cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp setspawn" + ChatColor.GRAY + ": Sets the first join spawnpoint."));
+            cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp setspawn" + ChatColor.GRAY + ": Sets the first-join spawnpoint."));
             cs.sendMessage(Utilities.formatCommandResponse(ChatColor.AQUA + "/fjp debug" + ChatColor.GRAY + ": Become a new player!"));
             return true;
         }
@@ -122,7 +122,7 @@ public class FirstJoinPlus extends JavaPlugin {
                 getConfig().set("on-first-join.teleport.world", player.getLocation().getWorld().getName());
                 saveConfig();
                 reloadConfig();
-                cs.sendMessage(Utilities.formatCommandResponse("Successfully set the first join spawn location."));
+                cs.sendMessage(Utilities.formatCommandResponse("Successfully set the first-join spawn location."));
             } else {
                 cs.sendMessage(Utilities.getNoPermissionMessage());
             }
