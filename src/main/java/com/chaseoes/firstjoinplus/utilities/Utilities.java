@@ -154,6 +154,7 @@ public class Utilities {
     public static String replaceVariables(String string, Player player) {
         string = string.replace("%player_name", player.getName());
         string = string.replace("%player_display_name", player.getDisplayName());
+        string = string.replace("%player_uuid", player.getUniqueId().toString());
         string = string.replace("%player_country", GeoIPUtilities.getCountry(player));
         string = string.replace("%player_city", GeoIPUtilities.getCity(player));
         string = string.replace("%total_players", getTotalPlayerCount() + "");
