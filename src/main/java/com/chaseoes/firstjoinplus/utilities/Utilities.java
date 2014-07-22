@@ -157,7 +157,8 @@ public class Utilities {
         string = string.replace("%player_country", GeoIPUtilities.getCountry(player));
         string = string.replace("%player_city", GeoIPUtilities.getCity(player));
         string = string.replace("%total_players", getTotalPlayerCount() + "");
-        string = string.replace("%random_player", getRandomPlayer().getDisplayName() + "");
+        string = string.replace("%random_player", getRandomPlayer().getName() + "");
+        string = string.replace("%random_player_display_name", getRandomPlayer().getDisplayName() + "");
         string = string.replace("%new_line", "\n");
         return translateColors(string);
     }
