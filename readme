@@ -3,6 +3,7 @@ http://dev.bukkit.org/server-mods/firstjoinplus/
 
 v2.3 [DEV]
 Version 2.3 is currently in development.
+Added the ability to use variables in written books.
 
 v2.2
 Compatible with the latest Craftbukkit beta build (1.7.9-R0.2) and above.

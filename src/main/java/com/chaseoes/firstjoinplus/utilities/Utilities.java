@@ -79,7 +79,7 @@ public class Utilities {
         return kit;
     }
 
-    public static List<ItemStack> getWrittenBooks() {
+    public static List<ItemStack> getWrittenBooks(Player viewingPlayer) {
         List<ItemStack> books = new ArrayList<ItemStack>();
         for (String file : FirstJoinPlus.getInstance().getConfig().getStringList("on-first-join.give-written-books.book-files")) {
             ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
@@ -93,6 +93,7 @@ public class Utilities {
 
                 while (line != null) {
                     i++;
+                    line = replaceVariables(line, viewingPlayer);
                     if (i != 1 && i != 2) {
                         if (line.equalsIgnoreCase("/newpage") || line.equalsIgnoreCase("/np")) {
                             bm.addPage(sb.toString());

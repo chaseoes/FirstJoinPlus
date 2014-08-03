@@ -1,6 +1,6 @@
 &bOur Rules
 chaseoes
-This is the first page!
+Hey %player_name, this is the first page!
 
 &lPlease read our rules!
 /newpage

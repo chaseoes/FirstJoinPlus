@@ -38,7 +38,7 @@ public class FirstJoinListener implements Listener {
                 }
 
                 if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.give-written-books.enabled")) {
-                    for (ItemStack i : Utilities.getWrittenBooks()) {
+                    for (ItemStack i : Utilities.getWrittenBooks(player)) {
                         player.getInventory().addItem(i);
                     }
                 }
