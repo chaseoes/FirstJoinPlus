@@ -1,6 +1,5 @@
 package com.chaseoes.firstjoinplus.utilities;
 
-
 import org.bukkit.entity.Player;
 
 import com.chaseoes.firstjoinplus.FirstJoinPlus;
