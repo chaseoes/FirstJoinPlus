@@ -60,7 +60,7 @@ public class Utilities {
             } catch (Exception e) {
                 FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Error encountered while attempting to give a new player the first join kit. Unknown item name: " + item[0]);
                 FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "Find and double check item names using this page:");
-                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html");
+                FirstJoinPlus.getInstance().getLogger().log(Level.SEVERE, "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html");
             }
 
             int amount = 1;
@@ -149,7 +149,7 @@ public class Utilities {
     }
 
     public static Player getRandomPlayer() {
-        return FirstJoinPlus.getInstance().getServer().getOnlinePlayers()[new Random().nextInt(FirstJoinPlus.getInstance().getServer().getOnlinePlayers().length)]; 
+        return (Player) FirstJoinPlus.getInstance().getServer().getOnlinePlayers().toArray()[new Random().nextInt(FirstJoinPlus.getInstance().getServer().getOnlinePlayers().size())]; 
     }
 
     public static String replaceVariables(String string, Player player) {

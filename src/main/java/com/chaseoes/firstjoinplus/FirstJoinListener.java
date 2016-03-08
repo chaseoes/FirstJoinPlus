@@ -56,7 +56,7 @@ public class FirstJoinListener implements Listener {
                 if (FirstJoinPlus.getInstance().getConfig().getBoolean("on-first-join.fun-stuff.play-sound.enabled")) {
                     for (Player p : FirstJoinPlus.getInstance().getServer().getOnlinePlayers()) {
                         if (p.hasPermission(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.fun-stuff.play-sound.listen-permission"))) {
-                            Sound s = Sound.valueOf(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.fun-stuff.play-sound.sound").toUpperCase());
+                            Sound s = Sound.valueOf(FirstJoinPlus.getInstance().getConfig().getString("on-first-join.fun-stuff.play-sound.sound-name").toUpperCase());
                             p.playSound(p.getLocation(), s, 1, 1);
                         }
                     }
