@@ -1,9 +1,13 @@
 FirstJoinPlus v2.3
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
-v2.3 [DEV]
-Version 2.3 is currently in development.
+v2.3
+Compatible with the latest Minecraft 1.9 builds.
 Added the ability to use variables in written books.
+Updated default configuration to use new sound name that was changed in Minecraft 1.9.
+Updated Metrics and/or Updater for Minecraft 1.9 compatibility.
+Fixed a broken link in an error message shown when using wrong material names.
+General project cleanup & improvements.
 
 v2.2
 Compatible with the latest Craftbukkit beta build (1.7.9-R0.2) and above.
