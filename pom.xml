@@ -1,32 +1,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<name>${plugin.name}</name>
-	<version>${plugin.version}</version>
-	<description>${plugin.name} by ${plugin.author}.</description>
-	<groupId>${plugin.groupID}</groupId>
-	<artifactId>${project.name}</artifactId>
+	<name>FirstJoinPlus</name>
+	<description>Customize all aspects of new players joining for the first time.</description>
+	<version>2.2</version>
+
+	<groupId>com.chaseoes</groupId>
 	<modelVersion>4.0.0</modelVersion>
-	<url>${plugin.url}</url>
-
+	<artifactId>${project.name}</artifactId>
+	<url>https://github.com/chaseoes/${project.name}</url>
 	<properties>
-		<plugin.version>2.2</plugin.version>
-		<plugin.name>FirstJoinPlus</plugin.name>
-		<plugin.name.lower>firstjoinplus</plugin.name.lower>
-
-		<plugin.author>chaseoes</plugin.author>
-		<plugin.groupID>com.chaseoes</plugin.groupID>
-		<plugin.url>http://chaseoes.com</plugin.url>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<upload.dbo.category>bukkit-plugins</upload.dbo.category>
+		<upload.dbo.slug>firstjoinplus</upload.dbo.slug>
 	</properties>
-
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/chaseoes/${project.name}/issues</url>
+	</issueManagement>
 	<build>
 		<finalName>${project.name}</finalName>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>*.yml</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/package.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>build</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -51,18 +79,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
-				<includes>
-					<include>*</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
-
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
@@ -81,7 +98,6 @@
 			<url>http://repo.gravitydevelopment.net</url>
 		</repository>
 	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.bukkit</groupId>

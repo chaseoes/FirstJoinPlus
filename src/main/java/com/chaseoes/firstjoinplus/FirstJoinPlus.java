@@ -136,14 +136,14 @@ public class FirstJoinPlus extends JavaPlugin {
             }
             return true;
         }
-
+        
         cs.sendMessage(Utilities.formatCommandResponse("Unknown command. Type " + ChatColor.AQUA + "/fjp help" + ChatColor.GRAY + " for help."));
         return true;
     }
 
     public GeoIPLookup getGeoIPLookup() {
         Plugin pl = getServer().getPluginManager().getPlugin("GeoIPTools");
-        if (pl != null) {
+        if(pl != null) {
             return ((GeoIPTools) pl).getGeoIPLookup();
         }
         return null;

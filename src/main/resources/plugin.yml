@@ -1,20 +1,20 @@
-name: ${plugin.name}
-main: ${plugin.groupID}.${plugin.name.lower}.${plugin.name}
-version: ${plugin.version}
+name: ${project.name}
+main: ${project.groupId}.${upload.dbo.slug}.${project.name}
+version: ${project.version}
 description: ${project.description}
 author: chaseoes
-dev-url: http://dev.bukkit.org/server-mods/${plugin.name.lower}/
-website: http://dev.bukkit.org/server-mods/${plugin.name.lower}/
+dev-url: http://dev.bukkit.org/server-mods/${upload.dbo.slug}/
+website: http://dev.bukkit.org/server-mods/${upload.dbo.slug}/
 softdepend: [GeoIPTools]
 commands:
-  ${plugin.name.lower}:
-    description: ${plugin.name} command(s).
+  ${upload.dbo.slug}:
+    description: ${project.name} command(s).
     aliases: fjp
-    usage: /${plugin.name.lower} [reload|setspawn|debug]
+    usage: /${upload.dbo.slug} [reload|setspawn|debug]
 permissions:
-  ${plugin.name.lower}.reload:
-    description: Permission to use the /${plugin.name.lower} reload command.
-  ${plugin.name.lower}.setspawn:
-    description: Permission to use the /${plugin.name.lower} setspawn command.
-  ${plugin.name.lower}.debug:
-    description: Permission to use the /${plugin.name.lower} debug command.
+  ${upload.dbo.slug}.reload:
+    description: Permission to use the /${upload.dbo.slug} reload command.
+  ${upload.dbo.slug}.setspawn:
+    description: Permission to use the /${upload.dbo.slug} setspawn command.
+  ${upload.dbo.slug}.debug:
+    description: Permission to use the /${upload.dbo.slug} debug command.
