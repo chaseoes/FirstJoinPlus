@@ -1,6 +1,9 @@
 FirstJoinPlus v2.3
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v2.3 [IN DEVELOPMENT]
+Fixed a case in which invalid material names for the first join kit weren't detected.
+
 v2.3
 Compatible with the latest Minecraft 1.9 builds.
 Added the ability to use variables in written books.
