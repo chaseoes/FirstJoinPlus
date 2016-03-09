@@ -10,7 +10,7 @@ on-first-join:
   fun-stuff:
     play-sound:
       enabled: true
-      sound: level_up
+      sound-name: entity_player_levelup
       listen-permission: firstjoinplus.notify
     smoke-effect:
       enabled: true

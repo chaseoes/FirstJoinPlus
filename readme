@@ -2,6 +2,7 @@ FirstJoinPlus v2.3
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
 v2.3 [IN DEVELOPMENT]
+Fixed the default configuration having an incorrect name for the first join sound.
 Fixed a case in which invalid material names for the first join kit weren't detected.
 
 v2.3
