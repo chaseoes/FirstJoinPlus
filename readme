@@ -1,7 +1,8 @@
-FirstJoinPlus v2.3
+FirstJoinPlus
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
-v2.3 [IN DEVELOPMENT]
+v2.4
+Compatible with the latest Minecraft 1.9 builds.
 Fixed the default configuration having an incorrect name for the first join sound.
 Fixed a case in which invalid material names for the first join kit weren't detected.
 

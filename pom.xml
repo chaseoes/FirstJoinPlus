@@ -9,7 +9,7 @@
 	<url>${plugin.url}</url>
 
 	<properties>
-		<plugin.version>2.3</plugin.version>
+		<plugin.version>2.4</plugin.version>
 		<plugin.name>FirstJoinPlus</plugin.name>
 		<plugin.name.lower>firstjoinplus</plugin.name.lower>
 
