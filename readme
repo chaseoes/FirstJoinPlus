@@ -1,6 +1,10 @@
 FirstJoinPlus
 http://dev.bukkit.org/server-mods/firstjoinplus/
 
+v2.4.1
+Compatible with the latest Minecraft 1.10.2 builds and above.
+Fixed some possible errors with Metrics.
+
 v2.4
 Compatible with the latest Minecraft 1.9 builds.
 Fixed the default configuration having an incorrect name for the first join sound.
